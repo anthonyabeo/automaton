@@ -10,9 +10,11 @@ class ALU extends Module {
     val aluCtl = Input(UInt(4.W))
 
     val zero = Output(Bool())
+    val overflow = Output(Bool())
     val result = Output(UInt(32.W))
   })
 
   io.result := io.a + io.b
+  io.overflow := false.B
   io.zero := (io.result === 0.U)
 }
