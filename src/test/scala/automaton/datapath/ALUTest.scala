@@ -15,6 +15,7 @@ class ALUTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
         c.io.result.expect(42.U)
         c.io.zero.expect(false.B)
+        c.io.overflow.expect(false.B)
       }
     }
   }
