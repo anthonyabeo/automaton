@@ -24,6 +24,8 @@ def javacOptionsVersion(scalaVersion: String): Seq[String] = {
   }
 }
 
+scalacOptions := Seq("-unchecked", "-deprecation")
+
 /////////////////////////
 // Configs
 /////////////////////////
