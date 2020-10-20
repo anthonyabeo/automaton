@@ -2,11 +2,11 @@ package automaton.datapath
 
 import chisel3._
 
-class RegisterFile(size: Int) extends Module {
+class RegisterFile(size: Int, regWidth: Int) extends Module {
   val io = IO(new Bundle {
-    val readReg1 = Input(UInt(5.W))
-    val readReg2 = Input(UInt(5.W))
-    val writeReg = Input(UInt(5.W))
+    val readReg1 = Input(UInt(regWidth.W))
+    val readReg2 = Input(UInt(regWidth.W))
+    val writeReg = Input(UInt(regWidth.W))
     val wrEna = Input(Bool())
     val writeData = Input(SInt(size.W))
 
