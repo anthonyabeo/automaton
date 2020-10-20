@@ -1,6 +1,7 @@
 package automaton.datapath
 
 import chisel3._
+import chisel3.util.experimental.loadMemoryFromFile
 
 class RegisterFile(size: Int, regWidth: Int) extends Module {
   val io = IO(new Bundle {
@@ -16,6 +17,8 @@ class RegisterFile(size: Int, regWidth: Int) extends Module {
 
   // Create Register File
   val regFile = Mem(size, SInt(size.W))
+
+  loadMemoryFromFile(regFile, "src/main/resources/data/register.txt")
 
   // Asynchronous reads
   io.readData1 := regFile.read(io.readReg1)
