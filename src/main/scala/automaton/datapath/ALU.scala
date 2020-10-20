@@ -7,19 +7,18 @@ import datapath._
 
 class ALU(size: Int) extends Module {
   val io = IO(new Bundle {
-    val a = Input(Bits(size.W))
-    val b = Input(Bits(size.W))
+    val a = Input(SInt(size.W))
+    val b = Input(SInt(size.W))
     val aluCtl = Input(UInt(4.W))
 
     val zero = Output(Bool())
-    val overflow = Output(Bool())
     val negative = Output(Bool())
-    val result = Output(Bits(size.W))
+    val result = Output(SInt(size.W))
   })
 
   val a = io.a
   val b = io.b
-  val res = WireDefault(0.U(size.W))
+  val res = WireDefault(0.S(size.W))
 
   switch(io.aluCtl) {
     is(add) {
@@ -40,7 +39,6 @@ class ALU(size: Int) extends Module {
   }
 
   io.result := res
-  io.overflow := false.B
-  io.negative := (res < 0.U)
-  io.zero := (res === 0.U)
+  io.negative := (res < 0.S)
+  io.zero := (res === 0.S)
 }
