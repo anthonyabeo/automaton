@@ -4,6 +4,8 @@ import chisel3._
 import chisel3.util.experimental.loadMemoryFromFile
 
 class RegisterFile(size: Int, regWidth: Int) extends Module {
+  val NUM_REGISTERS = 32
+
   val io = IO(new Bundle {
     val readReg1 = Input(UInt(regWidth.W))
     val readReg2 = Input(UInt(regWidth.W))
@@ -16,16 +18,18 @@ class RegisterFile(size: Int, regWidth: Int) extends Module {
   })
 
   // Create Register File
-  val regFile = Mem(size, SInt(size.W))
+  val regFile = Mem(NUM_REGISTERS, SInt(size.W))
+  io.readData1 := DontCare
+  io.readData2 := DontCare
 
   loadMemoryFromFile(regFile, "src/main/resources/data/register.txt")
 
   // Asynchronous reads
-  io.readData1 := regFile.read(io.readReg1)
-  io.readData2 := regFile.read(io.readReg2)
+  io.readData1 := regFile(io.readReg1)
+  io.readData2 := regFile(io.readReg2)
 
   // synchronous writes
   when(io.wrEna) {
-    regFile.write(idx = io.writeReg, data = io.writeData)
+    regFile(io.writeReg) := io.writeData
   }
 }
