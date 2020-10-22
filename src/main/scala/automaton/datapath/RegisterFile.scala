@@ -1,15 +1,16 @@
 package automaton.datapath
 
 import chisel3._
+import chisel3.util.log2Ceil
 import chisel3.util.experimental.loadMemoryFromFile
 
-class RegisterFile(size: Int, regWidth: Int) extends Module {
+class RegisterFile(size: Int) extends Module {
   val NUM_REGISTERS = 32
 
   val io = IO(new Bundle {
-    val readReg1 = Input(UInt(regWidth.W))
-    val readReg2 = Input(UInt(regWidth.W))
-    val writeReg = Input(UInt(regWidth.W))
+    val readReg1 = Input(UInt(log2Ceil(size).W))
+    val readReg2 = Input(UInt(log2Ceil(size).W))
+    val writeReg = Input(UInt(log2Ceil(size).W))
     val wrEna = Input(Bool())
     val writeData = Input(SInt(size.W))
 
