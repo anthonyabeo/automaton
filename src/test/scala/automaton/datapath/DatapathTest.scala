@@ -6,6 +6,7 @@ import chisel3._
 import chiseltest._
 import chiseltest.internal.WriteVcdAnnotation
 import chiseltest.experimental.TestOptionBuilder._
+import java.net.DatagramPacket
 
 class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
   behavior.of("Datapath")
@@ -48,11 +49,28 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.regWrite.poke(true.B)
       dp.io.aluCtl.poke(3.U)
       dp.io.aluSrcB.poke(0.U)
+      dp.io.memWrite.poke(false.B)
 
       dp.clock.step(1)
 
       dp.io.reg.expect(7.S)
       dp.io.pc.expect(3.U)
+    }
+
+    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+      dp.clock.step(1)
+      dp.clock.step(1)
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(4.U)
+      dp.io.aluSrcB.poke(0.U)
+      dp.io.memWrite.poke(false.B)
+
+      dp.clock.step(1)
+
+      dp.io.reg.expect(3.S)
+      dp.io.pc.expect(4.U)
     }
   }
 
@@ -60,6 +78,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
       {
         // Delay by 3 clock cycle to execute first 3 instruction
+        dp.clock.step(1)
         dp.clock.step(1)
         dp.clock.step(1)
         dp.clock.step(1)
@@ -72,7 +91,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
         dp.clock.step(1)
 
         dp.io.reg.expect(20.S)
-        dp.io.pc.expect(4.U)
+        dp.io.pc.expect(5.U)
       }
     }
   }
