@@ -43,7 +43,7 @@ class Datapath(XLEN: Int) extends Module {
   // DataMem.io.wrEna := io.memWrite
   // DataMem.io.dataIN :=
 
-  PC := PC + 4.U
+  PC := PC + 1.U
 
   io.reg := Alu.io.result
   io.pc := PC
