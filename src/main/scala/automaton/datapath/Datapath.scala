@@ -3,21 +3,24 @@ package automaton.datapath
 import chisel3._
 import chisel3.util._
 
-class Datapath(size: Int, regWidth: Int) extends Module {
+import datapath.signExt
+
+class Datapath(XLEN: Int) extends Module {
   val io = IO(new Bundle {
     val regWrite = Input(Bool())
     val aluCtl = Input(UInt(4.W))
     val memWrite = Input(Bool())
+    val aluSrcB = Input(UInt(1.W))
 
-    val reg = Output(SInt(size.W))
-    val pc = Output(UInt(size.W))
+    val reg = Output(SInt(XLEN.W))
+    val pc = Output(UInt(XLEN.W))
   })
 
-  val PC = RegInit(0.U(size.W))
-  val InstrMem = Module(new InstrCache(size, regWidth))
-  // val DataMem = Module(new DataCache(size, regWidth))
-  val RegFile = Module(new RegisterFile(size, regWidth))
-  val Alu = Module(new ALU(size))
+  val PC = RegInit(0.U(XLEN.W))
+  val InstrMem = Module(new InstrCache(XLEN))
+  // val DataMem = Module(new DataCache(XLEN))
+  val RegFile = Module(new RegisterFile(XLEN))
+  val Alu = Module(new ALU(XLEN))
 
   InstrMem.io.addr := PC
   val instr = InstrMem.io.dataOUT
@@ -29,7 +32,11 @@ class Datapath(size: Int, regWidth: Int) extends Module {
   RegFile.io.writeData := Alu.io.result
 
   Alu.io.a := RegFile.io.readData1
-  Alu.io.b := RegFile.io.readData2
+  when(io.aluSrcB === 0.U) {
+    Alu.io.b := RegFile.io.readData2
+  }.otherwise {
+    Alu.io.b := signExt(instr(31, 20))
+  }
   Alu.io.aluCtl := io.aluCtl
 
   // DataMem.io.addr := Alu.io.result

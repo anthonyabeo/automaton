@@ -4,22 +4,22 @@ import chisel3._
 import chisel3.util.log2Ceil
 import chisel3.util.experimental.loadMemoryFromFile
 
-class RegisterFile(size: Int) extends Module {
+class RegisterFile(XLEN: Int) extends Module {
   val NUM_REGISTERS = 32
 
   val io = IO(new Bundle {
-    val readReg1 = Input(UInt(log2Ceil(size).W))
-    val readReg2 = Input(UInt(log2Ceil(size).W))
-    val writeReg = Input(UInt(log2Ceil(size).W))
+    val readReg1 = Input(UInt(log2Ceil(XLEN).W))
+    val readReg2 = Input(UInt(log2Ceil(XLEN).W))
+    val writeReg = Input(UInt(log2Ceil(XLEN).W))
     val wrEna = Input(Bool())
-    val writeData = Input(SInt(size.W))
+    val writeData = Input(SInt(XLEN.W))
 
-    val readData1 = Output(SInt(size.W))
-    val readData2 = Output(SInt(size.W))
+    val readData1 = Output(SInt(XLEN.W))
+    val readData2 = Output(SInt(XLEN.W))
   })
 
   // Create Register File
-  val regFile = Mem(NUM_REGISTERS, SInt(size.W))
+  val regFile = Mem(NUM_REGISTERS, SInt(XLEN.W))
   io.readData1 := DontCare
   io.readData2 := DontCare
 

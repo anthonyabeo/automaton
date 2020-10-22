@@ -5,20 +5,20 @@ import chisel3.util._
 
 import datapath._
 
-class ALU(size: Int) extends Module {
+class ALU(XLEN: Int) extends Module {
   val io = IO(new Bundle {
-    val a = Input(SInt(size.W))
-    val b = Input(SInt(size.W))
+    val a = Input(SInt(XLEN.W))
+    val b = Input(SInt(XLEN.W))
     val aluCtl = Input(UInt(4.W))
 
     val zero = Output(Bool())
     val negative = Output(Bool())
-    val result = Output(SInt(size.W))
+    val result = Output(SInt(XLEN.W))
   })
 
   val a = io.a
   val b = io.b
-  val res = WireDefault(0.S(size.W))
+  val res = WireDefault(0.S(XLEN.W))
 
   switch(io.aluCtl) {
     is(add) {
