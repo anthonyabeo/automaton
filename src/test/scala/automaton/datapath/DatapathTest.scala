@@ -11,7 +11,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
   behavior.of("Datapath")
 
   "Datapath" should "perform register ADD instruction" in {
-    test(new Datapath(size = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
       {
         dp.io.regWrite.poke(true.B)
         dp.io.aluCtl.poke(0.U)
@@ -21,26 +21,27 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
         dp.clock.step(1)
 
         dp.io.reg.expect(11.S)
-        dp.io.pc.expect(4.U)
+        dp.io.pc.expect(1.U)
       }
     }
   }
 
-  // it should "perform register ADDI operation" in {
-  //   test(new Datapath(size = 32, regWidth = 5)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
-  //     {
-  //       dp.clock.step(1)
+  it should "perform register ADDI operation" in {
+    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+      {
+        // Delay by 1 clock cycle to execute first instruction
+        dp.clock.step(1)
 
-  //       dp.io.regWrite.poke(true.B)
-  //       dp.io.aluCtl.poke(0.U)
-  //       dp.io.memWrite.poke(false.B)
-  //       dp.io.aluSrcB.poke(1.U)
+        dp.io.regWrite.poke(true.B)
+        dp.io.aluCtl.poke(0.U)
+        dp.io.memWrite.poke(false.B)
+        dp.io.aluSrcB.poke(1.U)
 
-  //       dp.clock.step(1)
+        dp.clock.step(1)
 
-  //       dp.io.reg.expect(17.S)
-  //       dp.io.pc.expect(8.U)
-  //     }
-  //   }
-  // }
+        dp.io.reg.expect(20.S)
+        dp.io.pc.expect(2.U)
+      }
+    }
+  }
 }
