@@ -8,7 +8,7 @@ import chiseltest._
 class RegFileTest extends FlatSpec with ChiselScalatestTester with Matchers {
   behavior.of("Register File")
   "Register File" should "write to valid memory location" in {
-    test(new RegisterFile(size = 32)) { reg =>
+    test(new RegisterFile(XLEN = 32)) { reg =>
       // Writing to Register files
       reg.io.wrEna.poke(true.B)
       reg.io.writeReg.poke(5.U)
@@ -23,7 +23,7 @@ class RegFileTest extends FlatSpec with ChiselScalatestTester with Matchers {
   }
 
   "Register File" should "read from both read ports asynchronously" in {
-    test(new RegisterFile(size = 32)) { reg =>
+    test(new RegisterFile(XLEN = 32)) { reg =>
       reg.io.wrEna.poke(true.B)
       reg.io.writeReg.poke(2.U)
       reg.io.writeData.poke(100.S)
