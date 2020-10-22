@@ -14,6 +14,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
   "Datapath" should "perform Integer Register-Register Operations" in {
     test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
       {
+        // ADD
         dp.io.regWrite.poke(true.B)
         dp.io.aluCtl.poke(0.U)
         dp.io.memWrite.poke(false.B)
@@ -27,7 +28,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
 
     test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
-      // Delay by 1 clock cycle to execute first instruction
+      // AND
+
+      // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
 
       dp.io.regWrite.poke(true.B)
@@ -42,7 +45,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
 
     test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
-      // Delay by 2 clock cycle to execute first 2 instruction
+      // OR
+
+      // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.clock.step(1)
 
@@ -58,6 +63,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
 
     test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+      // XOR
+
+      // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.clock.step(1)
       dp.clock.step(1)
@@ -77,7 +85,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
   it should "perform Integer Register-Immediate Instructions" in {
     test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
       {
-        // Delay by 3 clock cycle to execute first 3 instruction
+        // ADDI
+
+        // Delay for a few clock cycle to execute prior instructions
         dp.clock.step(1)
         dp.clock.step(1)
         dp.clock.step(1)
