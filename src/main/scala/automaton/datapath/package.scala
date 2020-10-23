@@ -2,7 +2,7 @@ package object datapath {
   import chisel3._
   import chisel3.util._
 
-  val add :: sub :: and :: or :: xor :: Nil = Enum(5)
+  val add :: sub :: and :: or :: xor :: sll :: srl :: sra :: Nil = Enum(8)
 
   def signExt(n: UInt): SInt = {
     val bitString = "b0".U
