@@ -36,6 +36,12 @@ class ALU(XLEN: Int) extends Module {
     is(xor) {
       res := a ^ b
     }
+    is(sll) {
+      res := a << b(4, 0).asUInt
+    }
+    is(srl) {
+      res := a >> b(4, 0).asUInt
+    }
   }
 
   io.result := res
