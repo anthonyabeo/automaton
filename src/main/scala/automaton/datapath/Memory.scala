@@ -10,12 +10,12 @@ class DataCache(XLEN: Int) extends Module {
   val io = IO(new Bundle {
     val addr = Input(UInt(log2Ceil(CAPACITY).W))
     val wrEna = Input(Bool())
-    val dataIN = Input(UInt(XLEN.W))
+    val dataIN = Input(SInt(XLEN.W))
 
-    val dataOUT = Output(UInt(XLEN.W))
+    val dataOUT = Output(SInt(XLEN.W))
   })
 
-  val mem = SyncReadMem(CAPACITY, UInt(XLEN.W))
+  val mem = SyncReadMem(CAPACITY, SInt(XLEN.W))
 
   when(io.wrEna) {
     mem.write(io.addr, io.dataIN)
