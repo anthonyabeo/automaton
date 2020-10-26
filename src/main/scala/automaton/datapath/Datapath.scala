@@ -3,7 +3,7 @@ package automaton.datapath
 import chisel3._
 import chisel3.util._
 
-import datapath.signExt
+import datapath.{oneTo32Sext, signExt}
 
 class Datapath(XLEN: Int) extends Module {
   val io = IO(new Bundle {
@@ -11,9 +11,11 @@ class Datapath(XLEN: Int) extends Module {
     val aluCtl = Input(UInt(4.W))
     val memWrite = Input(Bool())
     val aluSrcB = Input(UInt(1.W))
+    val toReg = Input(UInt(1.W))
 
     val reg = Output(SInt(XLEN.W))
     val pc = Output(UInt(XLEN.W))
+    val neg = Output(Bool())
   })
 
   val PC = RegInit(0.U(XLEN.W))
@@ -29,7 +31,11 @@ class Datapath(XLEN: Int) extends Module {
   RegFile.io.readReg2 := instr(24, 20)
   RegFile.io.writeReg := instr(11, 7)
   RegFile.io.wrEna := io.regWrite
-  RegFile.io.writeData := Alu.io.result
+  when(io.toReg === 0.U) {
+    RegFile.io.writeData := Alu.io.result
+  }.otherwise {
+    RegFile.io.writeData := oneTo32Sext(Alu.io.negative)
+  }
 
   Alu.io.a := RegFile.io.readData1
   when(io.aluSrcB === 0.U) {
@@ -47,4 +53,5 @@ class Datapath(XLEN: Int) extends Module {
 
   io.reg := Alu.io.result
   io.pc := PC
+  io.neg := Alu.io.negative
 }
