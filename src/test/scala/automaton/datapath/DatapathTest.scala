@@ -50,8 +50,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
         // OR
 
         // Delay for a few clock cycle to execute prior instructions
-        dp.clock.step(1)
-        dp.clock.step(1)
+        dp.clock.step(2)
 
         dp.io.regWrite.poke(true.B)
         dp.io.aluCtl.poke(3.U)
@@ -67,11 +66,8 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
     test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
       // XOR
-
       // Delay for a few clock cycle to execute prior instructions
-      dp.clock.step(1)
-      dp.clock.step(1)
-      dp.clock.step(1)
+      dp.clock.step(3)
 
       dp.io.regWrite.poke(true.B)
       dp.io.aluCtl.poke(4.U)
@@ -88,10 +84,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       {
         // SUB
         // Delay for a few clock cycle to execute prior instructions
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
+        dp.clock.step(4)
 
         dp.io.regWrite.poke(true.B)
         dp.io.aluCtl.poke(1.U)
@@ -109,11 +102,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       {
         // SLL- shift left logical
         // Delay for a few clock cycle to execute prior instructions
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
+        dp.clock.step(5)
 
         dp.io.regWrite.poke(true.B)
         dp.io.aluCtl.poke(5.U)
@@ -131,12 +120,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       {
         // SRL- shift right logical
         // Delay for a few clock cycle to execute prior instructions
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
+        dp.clock.step(6)
 
         dp.io.regWrite.poke(true.B)
         dp.io.aluCtl.poke(6.U)
@@ -154,13 +138,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       {
         // SLT - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0
         // Delay for a few clock cycle to execute prior instructions
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
+        dp.clock.step(7)
 
         dp.io.regWrite.poke(true.B)
         dp.io.aluSrcB.poke(0.U)
@@ -180,14 +158,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       {
         // SLT - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0
         // Delay for a few clock cycle to execute prior instructions
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
+        dp.clock.step(8)
 
         dp.io.regWrite.poke(true.B)
         dp.io.aluSrcB.poke(0.U)
@@ -233,15 +204,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       {
         // ADDI
         // Delay for a few clock cycle to execute prior instructions
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
-        dp.clock.step(1)
+        dp.clock.step(9)
 
         dp.io.regWrite.poke(true.B)
         dp.io.aluCtl.poke(0.U)
@@ -253,6 +216,54 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
         dp.io.reg.expect(20.S)
         dp.io.pc.expect(10.U)
       }
+    }
+
+    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+      // ANDI
+      // Delay for a few clock cycle to execute prior instructions
+      dp.clock.step(10)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(2.U)
+      dp.io.memWrite.poke(false.B)
+      dp.io.aluSrcB.poke(1.U)
+
+      dp.clock.step(1)
+
+      dp.io.reg.expect(5.S)
+      dp.io.pc.expect(11.U)
+    }
+
+    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+      // ORI
+      // Delay for a few clock cycle to execute prior instructions
+      dp.clock.step(11)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(3.U)
+      dp.io.memWrite.poke(false.B)
+      dp.io.aluSrcB.poke(1.U)
+
+      dp.clock.step(1)
+
+      dp.io.reg.expect(15.S)
+      dp.io.pc.expect(12.U)
+    }
+
+    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+      // XORI
+      // Delay for a few clock cycle to execute prior instructions
+      dp.clock.step(12)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(4.U)
+      dp.io.memWrite.poke(false.B)
+      dp.io.aluSrcB.poke(1.U)
+
+      dp.clock.step(1)
+
+      dp.io.reg.expect(10.S)
+      dp.io.pc.expect(13.U)
     }
   }
 }
