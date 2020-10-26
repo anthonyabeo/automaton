@@ -15,5 +15,10 @@ package object datapath {
     Cat(Fill(20, bitString), n).asSInt
   }
 
+  def oneTo32Sext(n: Bool): SInt = {
+    val bitString = "b0".U
+    Cat(Fill(31, bitString), n).asSInt
+  }
+
   def isPos(n: UInt): Bool = ((1.U << 31) & n) === 0.U
 }
