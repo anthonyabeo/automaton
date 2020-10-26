@@ -156,7 +156,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
     test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
       {
-        // SLT - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0
+        // SLTU - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0
         // Delay for a few clock cycle to execute prior instructions
         dp.clock.step(8)
 
@@ -264,6 +264,74 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(10.S)
       dp.io.pc.expect(13.U)
+    }
+
+    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+      // SLLI
+      // Delay for a few clock cycle to execute prior instructions
+      dp.clock.step(13)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(5.U)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+
+      dp.clock.step(1)
+
+      dp.io.reg.expect(24.S)
+      dp.io.pc.expect(14.U)
+    }
+
+    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+      // SRLI
+      // Delay for a few clock cycle to execute prior instructions
+      dp.clock.step(14)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(6.U)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+
+      dp.clock.step(1)
+
+      dp.io.reg.expect(3.S)
+      dp.io.pc.expect(15.U)
+    }
+
+    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+      // SLTI
+      // Delay for a few clock cycle to execute prior instructions
+      dp.clock.step(15)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+      dp.io.toReg.poke(1.U)
+      dp.io.aluCtl.poke(1.U) // substraction
+
+      dp.clock.step(1)
+
+      dp.io.reg.expect(-4.S)
+      dp.io.pc.expect(16.U)
+      dp.io.neg.expect(true.B)
+    }
+
+    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+      // SLTI
+      // Delay for a few clock cycle to execute prior instructions
+      dp.clock.step(16)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+      dp.io.toReg.poke(1.U)
+      dp.io.aluCtl.poke(1.U) // substraction
+
+      dp.clock.step(1)
+
+      dp.io.reg.expect(3.S)
+      dp.io.pc.expect(17.U)
+      dp.io.neg.expect(false.B)
     }
   }
 }
