@@ -149,14 +149,92 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
         dp.io.pc.expect(7.U)
       }
     }
+
+    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+      {
+        // SLT - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0
+        // Delay for a few clock cycle to execute prior instructions
+        dp.clock.step(1)
+        dp.clock.step(1)
+        dp.clock.step(1)
+        dp.clock.step(1)
+        dp.clock.step(1)
+        dp.clock.step(1)
+        dp.clock.step(1)
+
+        dp.io.regWrite.poke(true.B)
+        dp.io.aluSrcB.poke(0.U)
+        dp.io.memWrite.poke(false.B)
+        dp.io.toReg.poke(1.U)
+        dp.io.aluCtl.poke(1.U) // substraction
+
+        dp.clock.step(1)
+
+        dp.io.reg.expect(-3.S)
+        dp.io.pc.expect(8.U)
+        dp.io.neg.expect(true.B)
+      }
+    }
+
+    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+      {
+        // SLT - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0
+        // Delay for a few clock cycle to execute prior instructions
+        dp.clock.step(1)
+        dp.clock.step(1)
+        dp.clock.step(1)
+        dp.clock.step(1)
+        dp.clock.step(1)
+        dp.clock.step(1)
+        dp.clock.step(1)
+        dp.clock.step(1)
+
+        dp.io.regWrite.poke(true.B)
+        dp.io.aluSrcB.poke(0.U)
+        dp.io.memWrite.poke(false.B)
+        dp.io.toReg.poke(1.U)
+        dp.io.aluCtl.poke(1.U) // substraction
+
+        dp.clock.step(1)
+
+        dp.io.reg.expect(-1.S)
+        dp.io.pc.expect(9.U)
+        dp.io.neg.expect(true.B)
+      }
+    }
+
+    // test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+    //   {
+    //     // SRA- shift right arithmetic
+    //     // Delay for a few clock cycle to execute prior instructions
+    //     dp.clock.step(1)
+    //     dp.clock.step(1)
+    //     dp.clock.step(1)
+    //     dp.clock.step(1)
+    //     dp.clock.step(1)
+    //     dp.clock.step(1)
+    //     dp.clock.step(1)
+
+    //     dp.io.regWrite.poke(true.B)
+    //     dp.io.aluCtl.poke(7.U)
+    //     dp.io.aluSrcB.poke(0.U)
+    //     dp.io.memWrite.poke(false.B)
+
+    //     dp.clock.step(1)
+
+    //     dp.io.reg.expect(-38.S)
+    //     dp.io.pc.expect(8.U)
+    //   }
+    // }
   }
 
   it should "perform Integer Register-Immediate Instructions" in {
     test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
       {
         // ADDI
-
         // Delay for a few clock cycle to execute prior instructions
+        dp.clock.step(1)
+        dp.clock.step(1)
         dp.clock.step(1)
         dp.clock.step(1)
         dp.clock.step(1)
@@ -173,7 +251,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
         dp.clock.step(1)
 
         dp.io.reg.expect(20.S)
-        dp.io.pc.expect(8.U)
+        dp.io.pc.expect(10.U)
       }
     }
   }
