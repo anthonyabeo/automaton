@@ -16,12 +16,15 @@ class DataCache(XLEN: Int) extends Module {
   })
 
   val mem = SyncReadMem(CAPACITY, SInt(XLEN.W))
+  io.dataOUT := DontCare
+
+  loadMemoryFromFile(mem, "src/main/resources/data/data.txt")
 
   when(io.wrEna) {
     mem.write(io.addr, io.dataIN)
+  }.otherwise {
+    io.dataOUT := mem.read(io.addr)
   }
-
-  io.dataOUT := mem.read(io.addr)
 }
 
 class InstrCache(XLEN: Int) extends Module {
