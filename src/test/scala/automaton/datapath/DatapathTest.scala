@@ -351,5 +351,25 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.pc.expect(18.U)
       dp.io.reg.expect(6.S)
     }
+
+    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+      // LW - load word
+      // Delay for a few clock cycle to execute prior instructions
+      dp.clock.step(18)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+      dp.io.aluCtl.poke(0.U)
+      dp.io.toReg.poke(1.U)
+
+      dp.clock.step(1)
+
+      dp.io.reg.expect(10.S)
+
+      dp.clock.step(1)
+
+      dp.io.pc.expect(20.U)
+    }
   }
 }
