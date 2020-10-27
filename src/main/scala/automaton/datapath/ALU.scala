@@ -42,6 +42,7 @@ class ALU(XLEN: Int) extends Module {
     is(srl) {
       res := a >> b(4, 0).asUInt
     }
+    is(sra) {}
   }
 
   io.result := res
