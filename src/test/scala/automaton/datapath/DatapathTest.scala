@@ -372,4 +372,22 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.pc.expect(20.U)
     }
   }
+
+  it should "perform Conditional Branch Instructions" in {
+    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+      // BEQ - branch if equal
+      // Delay for a few clock cycle to execute prior instructions
+      dp.clock.step(20)
+
+      dp.io.aluSrcB.poke(0.U)
+      dp.io.aluCtl.poke(1.U)
+      dp.io.branch.poke(true.B)
+
+      dp.clock.step(1)
+
+      dp.io.reg.expect(0.S)
+      dp.io.zero.expect(true.B)
+      dp.io.pc.expect(220.U)
+    }
+  }
 }
