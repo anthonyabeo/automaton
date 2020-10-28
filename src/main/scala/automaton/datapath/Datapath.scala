@@ -12,10 +12,12 @@ class Datapath(XLEN: Int) extends Module {
     val memWrite = Input(Bool())
     val aluSrcB = Input(UInt(1.W))
     val toReg = Input(UInt(2.W))
+    val branch = Input(Bool())
 
     val reg = Output(SInt(XLEN.W))
     val pc = Output(UInt(XLEN.W))
     val neg = Output(Bool())
+    val zero = Output(Bool())
   })
 
   val PC = RegInit(0.U(XLEN.W))
@@ -58,9 +60,15 @@ class Datapath(XLEN: Int) extends Module {
   DataMem.io.wrEna := io.memWrite
   DataMem.io.dataIN := RegFile.io.readData2
 
-  PC := PC + 1.U
+  val target = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8))).asUInt)
+  when((io.branch & Alu.io.zero) === 1.U) {
+    PC := PC + (target << 1)
+  }.otherwise {
+    PC := PC + 1.U
+  }
 
   io.reg := Alu.io.result
   io.pc := PC
   io.neg := Alu.io.negative
+  io.zero := Alu.io.zero
 }
