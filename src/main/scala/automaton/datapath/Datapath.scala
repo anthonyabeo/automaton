@@ -61,7 +61,7 @@ class Datapath(XLEN: Int) extends Module {
   DataMem.io.dataIN := RegFile.io.readData2
 
   val target = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8))).asUInt)
-  when((io.branch & Alu.io.zero) === 1.U) {
+  when(io.branch && Alu.io.zero) {
     PC := PC + (target << 1)
   }.otherwise {
     PC := PC + 1.U
