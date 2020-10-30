@@ -387,7 +387,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(0.S)
       dp.io.zero.expect(true.B)
-      dp.io.pc.expect(220.U)
+      dp.io.pc.expect(22.U)
     }
   }
 }
