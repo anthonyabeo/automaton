@@ -9,7 +9,7 @@ class ALU(XLEN: Int) extends Module {
   val io = IO(new Bundle {
     val a = Input(SInt(XLEN.W))
     val b = Input(SInt(XLEN.W))
-    val aluCtl = Input(UInt(4.W))
+    val aluCtl = Input(UInt(3.W))
 
     val zero = Output(Bool())
     val negative = Output(Bool())
