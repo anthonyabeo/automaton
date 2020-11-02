@@ -362,6 +362,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.memWrite.poke(false.B)
       dp.io.aluCtl.poke(0.U)
       dp.io.toReg.poke(1.U)
+      dp.io.branch.poke(false.B)
 
       dp.clock.step(1)
 
@@ -404,6 +405,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(0.S)
       dp.io.zero.expect(true.B)
+      dp.io.neg.expect(false.B)
 
       dp.clock.step(1)
 
@@ -429,6 +431,26 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.pc.expect(25.U)
     }
+
+    // test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+    //   // BGE - branch if less than
+    //   // Delay for a few clock cycle to execute prior instructions
+    //   dp.clock.step(25)
+
+    //   dp.io.aluSrcB.poke(0.U)
+    //   dp.io.aluCtl.poke(1.U)
+    //   dp.io.branch.poke(true.B)
+
+    //   dp.clock.step(1)
+
+    //   dp.io.reg.expect(1.S)
+    //   dp.io.zero.expect(false.B)
+    //   dp.io.neg.expect(false.B)
+
+    //   dp.clock.step(1)
+
+    //   dp.io.pc.expect(27.U)
+    // }
 
   }
 }
