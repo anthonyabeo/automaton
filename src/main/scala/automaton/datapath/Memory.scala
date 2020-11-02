@@ -15,7 +15,7 @@ class DataCache(XLEN: Int) extends Module {
     val dataOUT = Output(SInt(XLEN.W))
   })
 
-  val mem = SyncReadMem(CAPACITY, SInt(XLEN.W))
+  val mem = Mem(CAPACITY, SInt(XLEN.W))
   io.dataOUT := DontCare
 
   loadMemoryFromFile(mem, "src/main/resources/data/data.txt")
@@ -35,7 +35,7 @@ class InstrCache(XLEN: Int) extends Module {
     val dataOUT = Output(UInt(XLEN.W))
   })
 
-  val mem = SyncReadMem(CAPACITY, UInt(XLEN.W))
+  val mem = Mem(CAPACITY, UInt(XLEN.W))
 
   loadMemoryFromFile(mem, "src/main/resources/data/instr.txt")
 
