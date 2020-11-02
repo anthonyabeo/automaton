@@ -37,8 +37,10 @@ class Datapath(XLEN: Int) extends Module {
     RegFile.io.writeData := Alu.io.result
   }.elsewhen(io.toReg === 1.U) {
     RegFile.io.writeData := DataMem.io.dataOUT
-  }.otherwise {
+  }.elsewhen(io.toReg === 2.U) {
     RegFile.io.writeData := oneTo32Sext(Alu.io.negative)
+  }.otherwise {
+    RegFile.io.writeData := 5.S
   }
 
   val offSet = Wire(Bits(12.W))
@@ -62,8 +64,6 @@ class Datapath(XLEN: Int) extends Module {
 
   val target = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8))).asUInt)
   when(io.branch && Alu.io.zero) {
-    PC := PC + (target << 1.U)
-  }.elsewhen(io.branch && Alu.io.negative) {
     PC := PC + (target << 1.U)
   }.otherwise {
     PC := PC + 1.U
