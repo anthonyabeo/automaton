@@ -42,7 +42,15 @@ class ALU(XLEN: Int) extends Module {
     is(srl) {
       res := a >> b(4, 0).asUInt
     }
-    is(sra) {}
+    is(sra) {
+      val shamt = b(4, 0).asUInt
+      val mask = WireDefault(0.S(XLEN.W))
+      when(a(XLEN - 1) === 1.U) {
+        mask := -1.S << (new fromBigIntToLiteral(XLEN).asUInt - shamt)
+      }
+
+      res := (a >> shamt) | mask
+    }
   }
 
   io.result := res
