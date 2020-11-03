@@ -260,10 +260,24 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
     }
 
     test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
-      // SLTI
+      // SRAI
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(16)
       dp.io.pc.expect(16.U)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(7.U)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+
+      dp.io.reg.expect(-5.S)
+    }
+
+    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+      // SLTI
+      // Delay for a few clock cycle to execute prior instructions
+      dp.clock.step(17)
+      dp.io.pc.expect(17.U)
 
       dp.io.regWrite.poke(true.B)
       dp.io.aluSrcB.poke(1.U)
@@ -278,8 +292,8 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
       // SLTIU
       // Delay for a few clock cycle to execute prior instructions
-      dp.clock.step(17)
-      dp.io.pc.expect(17.U)
+      dp.clock.step(18)
+      dp.io.pc.expect(18.U)
 
       dp.io.regWrite.poke(true.B)
       dp.io.aluSrcB.poke(1.U)
@@ -296,8 +310,8 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
       // SW - store word
       // Delay for a few clock cycle to execute prior instructions
-      dp.clock.step(18)
-      dp.io.pc.expect(18.U)
+      dp.clock.step(19)
+      dp.io.pc.expect(19.U)
 
       dp.io.regWrite.poke(false.B)
       dp.io.aluSrcB.poke(1.U)
@@ -310,8 +324,8 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
       // LW - load word
       // Delay for a few clock cycle to execute prior instructions
-      dp.clock.step(19)
-      dp.io.pc.expect(19.U)
+      dp.clock.step(20)
+      dp.io.pc.expect(20.U)
 
       dp.io.regWrite.poke(true.B)
       dp.io.aluSrcB.poke(1.U)
