@@ -23,7 +23,7 @@ class RegisterFile(XLEN: Int) extends Module {
   io.readData1 := DontCare
   io.readData2 := DontCare
 
-  loadMemoryFromFile(regFile, "src/main/resources/data/register.txt")
+  loadMemoryFromFile(regFile, "src/test/resources/data/register.txt")
 
   // Asynchronous reads
   io.readData1 := regFile(io.readReg1)
