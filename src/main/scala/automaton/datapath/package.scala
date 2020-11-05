@@ -4,7 +4,7 @@ package object datapath {
 
   val add :: sub :: and :: or :: xor :: sll :: srl :: sra :: Nil = Enum(8)
 
-  def signExt(n: UInt): SInt = {
+  def signExt(n: UInt, extAmt: Int): SInt = {
     val bitString = "b0".U
     when(isPos(n)) {
       val bitString = "b0".U
@@ -12,7 +12,7 @@ package object datapath {
       val bitString = "b1".U
     }
 
-    Cat(Fill(20, bitString), n).asSInt
+    Cat(Fill(extAmt, bitString), n).asSInt
   }
 
   def oneTo32Sext(n: Bool): SInt = {
