@@ -322,6 +322,20 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.reg.expect(3.S)
       dp.io.zero.expect(false.B)
       dp.io.neg.expect(false.B)
+
+      ///////////////////////
+      // JAL- Jump and Link
+      ///////////////////////
+      dp.clock.step(1)
+      dp.io.pc.expect(29.U)
+
+      dp.io.aluSrcB.poke(2.U)
+      dp.io.aluSrcA.poke(1.U)
+      dp.io.aluCtl.poke(0.U)
+      dp.io.toReg.poke(3.U)
+      dp.io.regWrite.poke(true.B)
+
+      dp.io.reg.expect(31.S)
     }
   }
 }
