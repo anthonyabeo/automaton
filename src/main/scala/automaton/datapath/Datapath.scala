@@ -64,13 +64,13 @@ class Datapath(XLEN: Int) extends Module {
 
   val target = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8))).asUInt)
   when(io.branch & Alu.io.zero) {
-    PC := PC + (target << 1.U)
+    PC := PC + target
   }.elsewhen(io.branch & !Alu.io.zero) {
-    PC := PC + (target << 1.U)
+    PC := PC + target
   }.elsewhen(io.branch & Alu.io.negative) {
-    PC := PC + (target << 1.U)
+    PC := PC + target
   }.elsewhen(io.branch & !Alu.io.negative & !Alu.io.zero) {
-    PC := PC + (target << 1.U)
+    PC := PC + target
   }.otherwise {
     PC := PC + 1.U
   }
