@@ -14,6 +14,7 @@ class Datapath(XLEN: Int) extends Module {
     val aluSrcA = Input(UInt(2.W))
     val toReg = Input(UInt(2.W))
     val branch = Input(Bool())
+    val jmp = Input(Bool())
 
     val reg = Output(SInt(XLEN.W))
     val pc = Output(UInt(XLEN.W))
@@ -51,7 +52,7 @@ class Datapath(XLEN: Int) extends Module {
     offSet := instr(31, 20)
   }
 
-  val jmpOffset = WireInit(signExt(Cat(instr(31), instr(19, 12), instr(20), instr(30, 21)), 11).asUInt)
+  val jmpOffset = WireInit(signExt(Cat(instr(31), instr(19, 12), instr(20), instr(30, 21)), 12).asUInt)
 
   when(io.aluSrcA === 0.U) {
     Alu.io.a := RegFile.io.readData1
@@ -84,6 +85,10 @@ class Datapath(XLEN: Int) extends Module {
     PC := PC + target
   }.otherwise {
     PC := PC + 1.U
+  }
+
+  when(io.jmp) {
+    PC := Alu.io.result.asUInt
   }
 
   io.reg := Alu.io.result
