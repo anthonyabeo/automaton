@@ -14,7 +14,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
     test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
       dp.io.pc.expect(0.U)
 
-      // ADD
+      /////////////
+      // 1. ADD //
+      /////////////
       dp.io.regWrite.poke(true.B)
       dp.io.aluCtl.poke(0.U)
       dp.io.memWrite.poke(false.B)
@@ -22,7 +24,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(11.S)
 
-      // AND
+      ////////////
+      // 2. AND //
+      ////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(1.U)
@@ -34,7 +38,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(4.S)
 
-      // OR
+      ///////////
+      // 2. OR //
+      ///////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(2.U)
@@ -46,7 +52,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(7.S)
 
-      // XOR
+      ////////////
+      // 3. XOR //
+      ////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(3.U)
@@ -58,7 +66,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(3.S)
 
-      // SUB
+      ////////////
+      // 4. SUB //
+      ////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
 
@@ -69,7 +79,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(-1.S)
 
-      // SLL- shift left logical
+      /////////////////////////////
+      // 5. SLL- shift left logical //
+      /////////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(5.U)
@@ -81,7 +93,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(320.S)
 
-      // SRL- shift right logical
+      //////////////////////////////
+      // 6. SRL- shift right logical //
+      //////////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(6.U)
@@ -93,7 +107,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(0.S)
 
-      // SRA- shift right arithmetic
+      /////////////////////////////////
+      // 7. SRA- shift right arithmetic //
+      /////////////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(7.U)
@@ -105,7 +121,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(-3.S)
 
-      // SLT - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0
+      /////////////////////////////////////////////////////////////////
+      // 8. SLT - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0 //
+      /////////////////////////////////////////////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(8.U)
@@ -119,7 +137,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.reg.expect(-3.S)
       dp.io.neg.expect(true.B)
 
-      // SLTU - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0
+      //////////////////////////////////////////////////////////////////
+      // 9. SLTU - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0 //
+      //////////////////////////////////////////////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(9.U)
@@ -133,7 +153,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.reg.expect(-1.S)
       dp.io.neg.expect(true.B)
 
-      // ADDI
+      //////////////
+      // 10. ADDI //
+      //////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(10.U)
@@ -145,7 +167,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(20.S)
 
-      // ANDI
+      //////////////
+      // 11. ANDI //
+      //////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(11.U)
@@ -157,7 +181,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(5.S)
 
-      // ORI
+      //////////////
+      // 12. ORI  //
+      //////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(12.U)
@@ -169,7 +195,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(15.S)
 
-      // XORI
+      //////////////
+      // 13. XORI //
+      //////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(13.U)
@@ -181,7 +209,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(10.S)
 
-      // SLLI
+      ///////////////
+      // 14. SLLI  //
+      ///////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(14.U)
@@ -193,7 +223,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(24.S)
 
-      // SRLI
+      ///////////////
+      // 15. SRLI  //
+      //////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(15.U)
@@ -205,7 +237,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(3.S)
 
-      // SRAI
+      //////////////
+      // 16. SRAI //
+      //////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(16.U)
@@ -217,7 +251,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(-5.S)
 
-      // SLTI
+      ///////////////
+      // 17. SLTI  //
+      ///////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(17.U)
@@ -231,7 +267,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.reg.expect(-4.S)
       dp.io.neg.expect(true.B)
 
-      // SLTIU
+      ///////////////
+      // 18. SLTIU //
+      ///////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(18.U)
@@ -245,7 +283,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.reg.expect(3.S)
       dp.io.neg.expect(false.B)
 
-      // SW - store word
+      //////////////////////////
+      // 19. SW - store word //
+      /////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(19.U)
@@ -257,7 +297,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(6.S)
 
-      // LW - load word
+      //////////////////////////
+      // 20. LW - load word   //
+      //////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(20.U)
@@ -271,7 +313,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(10.S)
 
-      // BEQ - branch if equal
+      ////////////////////////////////
+      // 21. BEQ - branch if equal //
+      ////////////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(21.U)
@@ -284,7 +328,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.zero.expect(true.B)
       dp.io.neg.expect(false.B)
 
-      // BNE - branch if not equals
+      ////////////////////////////////////
+      // 22. BNE - branch if not equals //
+      ////////////////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(23.U)
@@ -297,7 +343,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.neg.expect(true.B)
       dp.io.zero.expect(false.B)
 
-      // BLT - branch if less than
+      ////////////////////////////////////
+      // 23. BLT - branch if less than  //
+      ////////////////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(25.U)
@@ -310,7 +358,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.zero.expect(false.B)
       dp.io.neg.expect(true.B)
 
-      // BGE - branch if less than
+      /////////////////////////////////////
+      // 24. BGE - branch if less than  //
+      ////////////////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(27.U)
@@ -323,9 +373,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.zero.expect(false.B)
       dp.io.neg.expect(false.B)
 
-      ///////////////////////
-      // JAL- Jump and Link
-      ///////////////////////
+      ////////////////////////////
+      // 25. JAL- Jump and Link //
+      ////////////////////////////
       dp.clock.step(1)
       dp.io.pc.expect(29.U)
 
@@ -338,9 +388,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(31.S)
 
-      ////////////////////////////////
-      // JALR- Jump and Link Register
-      ////////////////////////////////
+      ///////////////////////////////////////
+      // 26. JALR- Jump and Link Register //
+      //////////////////////////////////////
       dp.clock.step(1)
       dp.io.pc.expect(31.U)
 

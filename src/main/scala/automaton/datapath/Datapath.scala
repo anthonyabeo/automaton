@@ -53,6 +53,7 @@ class Datapath(XLEN: Int) extends Module {
   }
 
   val jmpOffset = WireInit(signExt(Cat(instr(31), instr(19, 12), instr(20), instr(30, 21)), 12).asUInt)
+  val target = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8)), 20).asUInt)
 
   when(io.aluSrcA === 0.U) {
     Alu.io.a := RegFile.io.readData1
@@ -74,7 +75,6 @@ class Datapath(XLEN: Int) extends Module {
   DataMem.io.wrEna := io.memWrite
   DataMem.io.dataIN := RegFile.io.readData2
 
-  val target = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8)), 20).asUInt)
   when(io.branch & Alu.io.zero) {
     PC := PC + target
   }.elsewhen(io.branch & !Alu.io.zero) {
