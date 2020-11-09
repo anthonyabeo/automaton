@@ -90,6 +90,21 @@ class ALUControl extends Module {
         }
       }
     }
+
+    is("b010".U) {
+      // SB Instruction Type
+      out := 1.U
+    }
+
+    is("b011".U, "b100".U) {
+      // LOAD & STORE
+      out := 0.U
+    }
+
+    is("b101".U, "b110".U) {
+      // JAL & JALR
+      out := 0.U
+    }
   }
 
   io.aluCtl := out

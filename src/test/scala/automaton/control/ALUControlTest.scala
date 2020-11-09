@@ -167,6 +167,31 @@ class ALUControlTest extends FlatSpec with ChiselScalatestTester {
       ctl.io.funct3.poke("b111".U)
 
       ctl.io.aluCtl.expect(2.U)
+
+      ////////////////////////
+      // BRANCH
+      ////////////////////////
+      ctl.io.aluOp.poke(2.U)
+
+      ctl.io.aluCtl.expect(1.U)
+
+      ////////////////////////
+      // LOAD & STORE
+      ////////////////////////
+      ctl.io.aluOp.poke(3.U)
+      ctl.io.aluCtl.expect(0.U)
+
+      ctl.io.aluOp.poke(4.U)
+      ctl.io.aluCtl.expect(0.U)
+
+      ////////////////////////
+      // JAL & JALR
+      ////////////////////////
+      ctl.io.aluOp.poke(5.U)
+      ctl.io.aluCtl.expect(0.U)
+
+      ctl.io.aluOp.poke(6.U)
+      ctl.io.aluCtl.expect(0.U)
     }
   }
 }
