@@ -58,7 +58,38 @@ class ALUControl extends Module {
       }
     }
 
-    is("b001".U) {}
+    is("b001".U) {
+      switch(io.funct3) {
+        is("b000".U) {
+          out := 0.U
+        }
+        is("b001".U) {
+          out := 5.U
+        }
+        is("b101".U) {
+          switch(io.funct7) {
+            is("b0000000".U) {
+              out := 6.U
+            }
+            is("b0100000".U) {
+              out := 7.U
+            }
+          }
+        }
+        is("b010".U, "b011".U) {
+          out := 1.U
+        }
+        is("b100".U) {
+          out := 4.U
+        }
+        is("b110".U) {
+          out := 3.U
+        }
+        is("b111".U) {
+          out := 2.U
+        }
+      }
+    }
   }
 
   io.aluCtl := out

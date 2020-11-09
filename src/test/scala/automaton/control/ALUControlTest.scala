@@ -95,4 +95,78 @@ class ALUControlTest extends FlatSpec with ChiselScalatestTester {
       ctl.io.aluCtl.expect(7.U)
     }
   }
+
+  it should "generate correct ALU OP for Register-Immediate Operations" in {
+    test(new ALUControl).withAnnotations(Seq(WriteVcdAnnotation)) { ctl =>
+      /////////////////////
+      // ADDI
+      /////////////////////
+      ctl.io.aluOp.poke(1.U)
+      ctl.io.funct3.poke(0.U)
+
+      ctl.io.aluCtl.expect(0.U)
+
+      /////////////////////
+      // SLLI
+      /////////////////////
+      ctl.io.aluOp.poke(1.U)
+      ctl.io.funct7.poke("b0000000".U)
+      ctl.io.funct3.poke("b001".U)
+
+      ctl.io.aluCtl.expect(5.U)
+
+      /////////////////////
+      // SRLI
+      /////////////////////
+      ctl.io.aluOp.poke(1.U)
+      ctl.io.funct7.poke("b0000000".U)
+      ctl.io.funct3.poke("b101".U)
+
+      ctl.io.aluCtl.expect(6.U)
+
+      /////////////////////
+      // SRAI
+      /////////////////////
+      ctl.io.aluOp.poke(1.U)
+      ctl.io.funct7.poke("b0100000".U)
+      ctl.io.funct3.poke("b101".U)
+
+      ctl.io.aluCtl.expect(7.U)
+
+      /////////////////////
+      // SLTI[U]
+      /////////////////////
+      ctl.io.aluOp.poke(1.U)
+
+      ctl.io.funct3.poke("b010".U)
+      ctl.io.aluCtl.expect(1.U)
+
+      ctl.io.funct3.poke("b011".U)
+      ctl.io.aluCtl.expect(1.U)
+
+      /////////////////////
+      // XOR
+      /////////////////////
+      ctl.io.aluOp.poke(1.U)
+      ctl.io.funct3.poke("b100".U)
+
+      ctl.io.aluCtl.expect(4.U)
+
+      /////////////////////
+      // ORI
+      /////////////////////
+      ctl.io.aluOp.poke(1.U)
+      ctl.io.funct3.poke("b110".U)
+
+      ctl.io.aluCtl.expect(3.U)
+
+      /////////////////////
+      // ANDI
+      /////////////////////
+      ctl.io.aluOp.poke(1.U)
+      ctl.io.funct3.poke("b111".U)
+
+      ctl.io.aluCtl.expect(2.U)
+    }
+  }
 }
