@@ -137,4 +137,44 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
 
     }
   }
+
+  it should "generate control signals for Branch Instructions" in {
+    test(new Controller).withAnnotations(Seq(WriteVcdAnnotation)) { ctl =>
+      ctl.io.opcode.poke("b1100011".U)
+
+      ctl.io.aluCtl.expect(1.U)
+    }
+  }
+
+  it should "generate control signals for Jump Instructions" in {
+    test(new Controller).withAnnotations(Seq(WriteVcdAnnotation)) { ctl =>
+      ///////////////
+      // JALR
+      ///////////////
+      ctl.io.opcode.poke("b1100111".U)
+      ctl.io.aluCtl.expect(0.U)
+
+      ///////////////
+      // JALR
+      ///////////////
+      ctl.io.opcode.poke("b1101111".U)
+      ctl.io.aluCtl.expect(0.U)
+    }
+  }
+
+  it should "generate control signals for Load AND Store Instructions" in {
+    test(new Controller).withAnnotations(Seq(WriteVcdAnnotation)) { ctl =>
+      ///////////////
+      // Load
+      ///////////////
+      ctl.io.opcode.poke("b0000011".U)
+      ctl.io.aluCtl.expect(0.U)
+
+      ///////////////
+      // Store
+      ///////////////
+      ctl.io.opcode.poke("b0100011".U)
+      ctl.io.aluCtl.expect(0.U)
+    }
+  }
 }
