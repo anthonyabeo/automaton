@@ -7,12 +7,14 @@ import chiseltest._
 import chiseltest.internal.WriteVcdAnnotation
 import chiseltest.experimental.TestOptionBuilder._
 
+import Automaton.Operation._
+
 class ControllerTest extends FlatSpec with ChiselScalatestTester {
   behavior.of("Controller")
 
   it should "generate control signals for Register-Register" in {
     test(new Controller).withAnnotations(Seq(WriteVcdAnnotation)) { ctl =>
-      ctl.io.opcode.poke("b0110011".U)
+      ctl.io.opcode.poke(new fromBigIntToLiteral(RegOp.id).asUInt)
       //////////
       // ADD
       //////////
@@ -82,7 +84,7 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
 
   it should "generate control signals for Register-Intermediate" in {
     test(new Controller).withAnnotations(Seq(WriteVcdAnnotation)) { ctl =>
-      ctl.io.opcode.poke("b0010011".U)
+      ctl.io.opcode.poke(new fromBigIntToLiteral(ImmeOp.id).asUInt)
       //////////
       // ADDI
       //////////
@@ -140,7 +142,7 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
 
   it should "generate control signals for Branch Instructions" in {
     test(new Controller).withAnnotations(Seq(WriteVcdAnnotation)) { ctl =>
-      ctl.io.opcode.poke("b1100011".U)
+      ctl.io.opcode.poke(new fromBigIntToLiteral(BranchOp.id).asUInt)
 
       ctl.io.aluCtl.expect(1.U)
     }
@@ -151,13 +153,13 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
       ///////////////
       // JALR
       ///////////////
-      ctl.io.opcode.poke("b1100111".U)
+      ctl.io.opcode.poke(new fromBigIntToLiteral(JalrOp.id).asUInt)
       ctl.io.aluCtl.expect(0.U)
 
       ///////////////
-      // JALR
+      // JAL
       ///////////////
-      ctl.io.opcode.poke("b1101111".U)
+      ctl.io.opcode.poke(new fromBigIntToLiteral(JalOp.id).asUInt)
       ctl.io.aluCtl.expect(0.U)
     }
   }
@@ -167,13 +169,13 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
       ///////////////
       // Load
       ///////////////
-      ctl.io.opcode.poke("b0000011".U)
+      ctl.io.opcode.poke((new fromBigIntToLiteral(LdOp.id).asUInt))
       ctl.io.aluCtl.expect(0.U)
 
       ///////////////
       // Store
       ///////////////
-      ctl.io.opcode.poke("b0100011".U)
+      ctl.io.opcode.poke((new fromBigIntToLiteral(StrOp.id).asUInt))
       ctl.io.aluCtl.expect(0.U)
     }
   }
