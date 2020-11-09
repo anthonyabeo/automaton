@@ -79,9 +79,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(-1.S)
 
-      /////////////////////////////
+      ////////////////////////////////
       // 5. SLL- shift left logical //
-      /////////////////////////////
+      ////////////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(5.U)
@@ -93,9 +93,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(320.S)
 
-      //////////////////////////////
+      /////////////////////////////////
       // 6. SRL- shift right logical //
-      //////////////////////////////
+      /////////////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(6.U)
@@ -107,9 +107,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(0.S)
 
-      /////////////////////////////////
+      /////////////////////////////////////
       // 7. SRA- shift right arithmetic //
-      /////////////////////////////////
+      ////////////////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(7.U)
@@ -121,9 +121,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       dp.io.reg.expect(-3.S)
 
-      /////////////////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////
       // 8. SLT - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0 //
-      /////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(8.U)
@@ -137,9 +137,9 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.reg.expect(-3.S)
       dp.io.neg.expect(true.B)
 
-      //////////////////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////
       // 9. SLTU - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0 //
-      //////////////////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(9.U)
@@ -315,7 +315,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
 
       ////////////////////////////////
       // 21. BEQ - branch if equal //
-      ////////////////////////////////
+      ///////////////////////////////
       // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
       dp.io.pc.expect(21.U)
