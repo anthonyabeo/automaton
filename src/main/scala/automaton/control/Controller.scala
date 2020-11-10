@@ -11,9 +11,9 @@ class Controller extends Module {
     val aluCtl = Output(UInt(3.W))
     val regWrite = Output(Bool())
     val memWrite = Output(Bool())
-    // val aluSrcB = Output(UInt(2.W))
-    // val aluSrcA = Output(UInt(2.W))
-    // val toReg = Output(UInt(2.W))
+    val aluSrcB = Output(UInt(2.W))
+    val aluSrcA = Output(UInt(2.W))
+    val toReg = Output(UInt(2.W))
     // val branch = Output(Bool())
     // val jmp = Output(Bool())
   })
@@ -25,6 +25,7 @@ class Controller extends Module {
   // Plumbing //
   /////////////
   MainCtl.io.opcode := io.opcode
+  MainCtl.io.funct3 := io.funct3
 
   ALUCtl.io.funct3 := io.funct3
   ALUCtl.io.funct7 := io.funct7
@@ -36,4 +37,7 @@ class Controller extends Module {
   io.aluCtl := ALUCtl.io.aluCtl
   io.regWrite := MainCtl.io.regWrite
   io.memWrite := MainCtl.io.memWrite
+  io.aluSrcB := MainCtl.io.aluSrcB
+  io.aluSrcA := MainCtl.io.aluSrcA
+  io.toReg := MainCtl.io.toReg
 }
