@@ -9,6 +9,13 @@ class Controller extends Module {
     val funct7 = Input(UInt(7.W))
 
     val aluCtl = Output(UInt(3.W))
+    val regWrite = Output(Bool())
+    val memWrite = Output(Bool())
+    // val aluSrcB = Output(UInt(2.W))
+    // val aluSrcA = Output(UInt(2.W))
+    // val toReg = Output(UInt(2.W))
+    // val branch = Output(Bool())
+    // val jmp = Output(Bool())
   })
 
   val ALUCtl = Module(new ALUControl)
@@ -27,4 +34,6 @@ class Controller extends Module {
   // Output Signals //
   ////////////////////
   io.aluCtl := ALUCtl.io.aluCtl
+  io.regWrite := MainCtl.io.regWrite
+  io.memWrite := MainCtl.io.memWrite
 }

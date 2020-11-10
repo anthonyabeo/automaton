@@ -10,33 +10,53 @@ class MainControl extends Module {
     val opcode = Input(UInt(7.W))
 
     val aluOp = Output(UInt(3.W))
+    val regWrite = Output(Bool())
+    val memWrite = Output(Bool())
   })
 
-  val out = WireDefault(0.U(3.W))
+  val op = WireDefault(0.U(3.W))
+  val regW = WireDefault(false.B)
+  val mWrt = WireDefault(false.B)
 
   switch(io.opcode) {
     is(new fromBigIntToLiteral(RegOp.id).asUInt) {
-      out := 0.U
+      op := 0.U
+      regW := true.B
+      mWrt := false.B
     }
     is(new fromBigIntToLiteral(ImmeOp.id).asUInt) {
-      out := 1.U
+      op := 1.U
+      regW := true.B
+      mWrt := false.B
     }
     is(new fromBigIntToLiteral(BranchOp.id).asUInt) {
-      out := 2.U
+      op := 2.U
+      regW := false.B
+      mWrt := false.B
     }
     is(new fromBigIntToLiteral(LdOp.id).asUInt) {
-      out := 3.U
+      op := 3.U
+      regW := true.B
+      mWrt := false.B
     }
     is(new fromBigIntToLiteral(StrOp.id).asUInt) {
-      out := 4.U
+      op := 4.U
+      regW := false.B
+      mWrt := true.B
     }
     is(new fromBigIntToLiteral(JalOp.id).asUInt) {
-      out := 5.U
+      op := 5.U
+      regW := true.B
+      mWrt := false.B
     }
     is(new fromBigIntToLiteral(JalrOp.id).asUInt) {
-      out := 6.U
+      op := 6.U
+      regW := true.B
+      mWrt := false.B
     }
   }
 
-  io.aluOp := out
+  io.aluOp := op
+  io.regWrite := regW
+  io.memWrite := mWrt
 }

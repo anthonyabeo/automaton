@@ -15,6 +15,7 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
   it should "generate control signals for Register-Register" in {
     test(new Controller).withAnnotations(Seq(WriteVcdAnnotation)) { ctl =>
       ctl.io.opcode.poke(new fromBigIntToLiteral(RegOp.id).asUInt)
+
       //////////
       // ADD
       //////////
@@ -22,6 +23,8 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
       ctl.io.funct7.poke("b0000000".U)
 
       ctl.io.aluCtl.expect(0.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
 
       //////////
       // SUB
@@ -30,6 +33,8 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
       ctl.io.funct7.poke("b0100000".U)
 
       ctl.io.aluCtl.expect(1.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
 
       //////////
       // SLL
@@ -38,6 +43,8 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
       ctl.io.funct7.poke("b0000000".U)
 
       ctl.io.aluCtl.expect(5.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
 
       //////////
       // SLT[U]
@@ -46,10 +53,14 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
       ctl.io.funct7.poke("b0000000".U)
 
       ctl.io.aluCtl.expect(1.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
 
       ctl.io.funct3.poke("b011".U)
-      ctl.io.aluCtl.expect(1.U)
 
+      ctl.io.aluCtl.expect(1.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
       //////////
       // XOR
       //////////
@@ -57,6 +68,8 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
       ctl.io.funct7.poke("b0000000".U)
 
       ctl.io.aluCtl.expect(4.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
 
       /////////////
       // SR[L|A] //
@@ -65,20 +78,30 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
       ctl.io.funct7.poke("b0000000".U)
 
       ctl.io.aluCtl.expect(6.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
 
       ctl.io.funct7.poke("b0100000".U)
+
       ctl.io.aluCtl.expect(7.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
 
       //////////////
       // OR | AND
       /////////////
       ctl.io.funct3.poke("b110".U)
       ctl.io.funct7.poke("b0000000".U)
+
       ctl.io.aluCtl.expect(3.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
 
       ctl.io.funct3.poke("b111".U)
-      ctl.io.aluCtl.expect(2.U)
 
+      ctl.io.aluCtl.expect(2.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
     }
   }
 
@@ -91,6 +114,8 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
       ctl.io.funct3.poke("b000".U)
 
       ctl.io.aluCtl.expect(0.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
 
       //////////
       // SLLI
@@ -99,16 +124,23 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
       ctl.io.funct7.poke("b0000000".U)
 
       ctl.io.aluCtl.expect(5.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
 
       //////////
       // SLTI[U]
       //////////
       ctl.io.funct3.poke("b010".U)
+
       ctl.io.aluCtl.expect(1.U)
+      ctl.io.memWrite.expect(false.B)
 
       ctl.io.funct3.poke("b011".U)
       ctl.io.funct7.poke("b0000000".U)
+
       ctl.io.aluCtl.expect(1.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
 
       //////////
       // XOR
@@ -116,6 +148,8 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
       ctl.io.funct3.poke("b100".U)
 
       ctl.io.aluCtl.expect(4.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
 
       /////////////
       // SR[L|A]I //
@@ -124,19 +158,29 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
       ctl.io.funct7.poke("b0000000".U)
 
       ctl.io.aluCtl.expect(6.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
 
       ctl.io.funct7.poke("b0100000".U)
+
       ctl.io.aluCtl.expect(7.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
 
       //////////////
       // ORI | ANDI
       //////////////
       ctl.io.funct3.poke("b110".U)
+
       ctl.io.aluCtl.expect(3.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
 
       ctl.io.funct3.poke("b111".U)
-      ctl.io.aluCtl.expect(2.U)
 
+      ctl.io.aluCtl.expect(2.U)
+      ctl.io.regWrite.expect(true.B)
+      ctl.io.memWrite.expect(false.B)
     }
   }
 
@@ -145,6 +189,7 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
       ctl.io.opcode.poke(new fromBigIntToLiteral(BranchOp.id).asUInt)
 
       ctl.io.aluCtl.expect(1.U)
+      ctl.io.regWrite.expect(false.B)
     }
   }
 
@@ -155,12 +200,14 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
       ///////////////
       ctl.io.opcode.poke(new fromBigIntToLiteral(JalrOp.id).asUInt)
       ctl.io.aluCtl.expect(0.U)
+      ctl.io.regWrite.expect(true.B)
 
       ///////////////
       // JAL
       ///////////////
       ctl.io.opcode.poke(new fromBigIntToLiteral(JalOp.id).asUInt)
       ctl.io.aluCtl.expect(0.U)
+      ctl.io.regWrite.expect(true.B)
     }
   }
 
@@ -171,12 +218,14 @@ class ControllerTest extends FlatSpec with ChiselScalatestTester {
       ///////////////
       ctl.io.opcode.poke((new fromBigIntToLiteral(LdOp.id).asUInt))
       ctl.io.aluCtl.expect(0.U)
+      ctl.io.regWrite.expect(true.B)
 
       ///////////////
       // Store
       ///////////////
       ctl.io.opcode.poke((new fromBigIntToLiteral(StrOp.id).asUInt))
       ctl.io.aluCtl.expect(0.U)
+      ctl.io.regWrite.expect(false.B)
     }
   }
 }
