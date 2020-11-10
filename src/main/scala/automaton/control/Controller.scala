@@ -14,8 +14,8 @@ class Controller extends Module {
     val aluSrcB = Output(UInt(2.W))
     val aluSrcA = Output(UInt(2.W))
     val toReg = Output(UInt(2.W))
-    // val branch = Output(Bool())
-    // val jmp = Output(Bool())
+    val branch = Output(Bool())
+    val jmp = Output(Bool())
   })
 
   val ALUCtl = Module(new ALUControl)
@@ -40,4 +40,6 @@ class Controller extends Module {
   io.aluSrcB := MainCtl.io.aluSrcB
   io.aluSrcA := MainCtl.io.aluSrcA
   io.toReg := MainCtl.io.toReg
+  io.branch := MainCtl.io.branch
+  io.jmp := MainCtl.io.jmp
 }
