@@ -4,23 +4,25 @@ package object datapath {
 
   val add :: sub :: and :: or :: xor :: sll :: srl :: sra :: Nil = Enum(8)
 
-  def signExt(n: UInt, extAmt: Int): SInt = {
-    val bitString = "b0".U
-    when(isPos(n)) {
+  def signExt(n: SInt, extAmt: Int): SInt = {
+    val width = (32 - extAmt - 1)
+    val out = Wire(Bits(12.W))
+
+    when((n(width) === 0.U).asBool()) {
       val bitString = "b0".U
+      out := Cat(Fill(extAmt, bitString), n)
     }.otherwise {
       val bitString = "b1".U
+      out := Cat(Fill(extAmt, bitString), n)
     }
 
-    Cat(Fill(extAmt, bitString), n).asSInt
+    out.asSInt
   }
 
   def oneTo32Sext(n: Bool): SInt = {
     val bitString = "b0".U
     Cat(Fill(31, bitString), n).asSInt
   }
-
-  def isPos(n: UInt): Bool = ((1.U << 31) & n) === 0.U
 
   object Operation extends Enumeration {
     type Operation = Value
