@@ -5,7 +5,7 @@ def scalacOptionsVersion(scalaVersion: String): Seq[String] = {
     //  https://github.com/scala/bug/issues/10047
     CrossVersion.partialVersion(scalaVersion) match {
       case Some((2, scalaMajor: Long)) if scalaMajor < 12 => Seq()
-      case _                                              => Seq("-Xsource:2.11")
+      case _ => Seq("-Xsource:2.11")
     }
   }
 }
