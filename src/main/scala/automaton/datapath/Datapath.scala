@@ -56,7 +56,7 @@ class Datapath(XLEN: Int) extends Module {
     offSet := instr(31, 20)
   }
 
-  val jmpOffset = WireInit(signExt(Cat(instr(31), instr(19, 12), instr(20), instr(30, 21)).asSInt, 12))
+  val jmpOffset = WireInit(signExt(Cat(instr(31), instr(19, 12), instr(20), instr(30, 21), "b0".U).asSInt, 12))
   val target = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8), "b0".U).asSInt, 19))
 
   when(io.aluSrcA === 0.U) {
