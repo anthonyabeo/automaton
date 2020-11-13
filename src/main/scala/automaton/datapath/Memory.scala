@@ -1,7 +1,7 @@
 package automaton.datapath
 
 import chisel3._
-import chisel3.util.log2Ceil
+import chisel3.util._
 import chisel3.util.experimental.loadMemoryFromFile
 
 class DataCache(XLEN: Int) extends Module {
@@ -35,9 +35,9 @@ class InstrCache(XLEN: Int) extends Module {
     val dataOUT = Output(UInt(XLEN.W))
   })
 
-  val mem = Mem(CAPACITY, UInt(XLEN.W))
+  val mem = Mem(CAPACITY, UInt(8.W))
 
   loadMemoryFromFile(mem, "src/test/resources/data/instr.txt")
 
-  io.dataOUT := mem.read(io.addr)
+  io.dataOUT := Cat(mem.read(io.addr + 3.U), mem.read(io.addr + 2.U), mem.read(io.addr + 1.U), mem.read(io.addr))
 }
