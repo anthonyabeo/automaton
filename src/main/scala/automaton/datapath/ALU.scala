@@ -13,6 +13,7 @@ class ALU(XLEN: Int) extends Module {
 
     val zero = Output(Bool())
     val negative = Output(Bool())
+    val positive = Output(Bool())
     val result = Output(SInt(XLEN.W))
   })
 
@@ -55,5 +56,6 @@ class ALU(XLEN: Int) extends Module {
 
   io.result := res
   io.negative := (res < 0.S)
+  io.positive := (res > 0.S)
   io.zero := (res === 0.S)
 }
