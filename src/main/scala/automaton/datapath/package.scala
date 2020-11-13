@@ -6,9 +6,9 @@ package object datapath {
 
   def signExt(n: SInt, extAmt: Int): SInt = {
     val width = (32 - extAmt - 1)
-    val out = Wire(Bits(12.W))
+    val out = Wire(Bits(32.W))
 
-    when((n(width) === 0.U).asBool()) {
+    when((n(width) === 0.U)) {
       val bitString = "b0".U
       out := Cat(Fill(extAmt, bitString), n)
     }.otherwise {
