@@ -17,6 +17,7 @@ class MainControl extends Module {
     val aluSrcA = Output(UInt(2.W))
     val toReg = Output(UInt(2.W))
     val branch = Output(Bool())
+    val bType = Output(UInt(2.W))
     val jmp = Output(Bool())
   })
 
@@ -28,6 +29,7 @@ class MainControl extends Module {
   val tReg = WireDefault(0.U(2.W))
   val br = WireDefault(false.B)
   val jp = WireDefault(false.B)
+  val bt = WireDefault(0.U(2.W))
 
   switch(io.opcode) {
     is(new fromBigIntToLiteral(RegOp.id).asUInt) {
@@ -43,6 +45,16 @@ class MainControl extends Module {
       }
       br := false.B
       jp := false.B
+
+      when(io.funct3 === "b000".U) {
+        bt := "b00".U
+      }.elsewhen(io.funct3 === "b001".U) {
+        bt := "b01".U
+      }.elsewhen(io.funct3 === "b100".U || io.funct3 === "b110".U) {
+        bt := "b10".U
+      }.otherwise {
+        bt := "b11".U
+      }
     }
     is(new fromBigIntToLiteral(ImmeOp.id).asUInt) {
       op := 1.U
@@ -57,6 +69,16 @@ class MainControl extends Module {
       }
       br := false.B
       jp := false.B
+
+      when(io.funct3 === "b000".U) {
+        bt := "b00".U
+      }.elsewhen(io.funct3 === "b001".U) {
+        bt := "b01".U
+      }.elsewhen(io.funct3 === "b100".U || io.funct3 === "b110".U) {
+        bt := "b10".U
+      }.otherwise {
+        bt := "b11".U
+      }
     }
     is(new fromBigIntToLiteral(BranchOp.id).asUInt) {
       op := 2.U
@@ -67,6 +89,16 @@ class MainControl extends Module {
       tReg := 0.U
       br := true.B
       jp := false.B
+
+      when(io.funct3 === "b000".U) {
+        bt := "b00".U
+      }.elsewhen(io.funct3 === "b001".U) {
+        bt := "b01".U
+      }.elsewhen(io.funct3 === "b100".U || io.funct3 === "b110".U) {
+        bt := "b10".U
+      }.otherwise {
+        bt := "b11".U
+      }
     }
     is(new fromBigIntToLiteral(LdOp.id).asUInt) {
       op := 3.U
@@ -77,6 +109,16 @@ class MainControl extends Module {
       tReg := 1.U
       br := false.B
       jp := false.B
+
+      when(io.funct3 === "b000".U) {
+        bt := "b00".U
+      }.elsewhen(io.funct3 === "b001".U) {
+        bt := "b01".U
+      }.elsewhen(io.funct3 === "b100".U || io.funct3 === "b110".U) {
+        bt := "b10".U
+      }.otherwise {
+        bt := "b11".U
+      }
     }
     is(new fromBigIntToLiteral(StrOp.id).asUInt) {
       op := 4.U
@@ -87,6 +129,16 @@ class MainControl extends Module {
       tReg := 0.U
       br := false.B
       jp := false.B
+
+      when(io.funct3 === "b000".U) {
+        bt := "b00".U
+      }.elsewhen(io.funct3 === "b001".U) {
+        bt := "b01".U
+      }.elsewhen(io.funct3 === "b100".U || io.funct3 === "b110".U) {
+        bt := "b10".U
+      }.otherwise {
+        bt := "b11".U
+      }
     }
     is(new fromBigIntToLiteral(JalOp.id).asUInt) {
       op := 5.U
@@ -97,6 +149,16 @@ class MainControl extends Module {
       tReg := 3.U
       br := false.B
       jp := true.B
+
+      when(io.funct3 === "b000".U) {
+        bt := "b00".U
+      }.elsewhen(io.funct3 === "b001".U) {
+        bt := "b01".U
+      }.elsewhen(io.funct3 === "b100".U || io.funct3 === "b110".U) {
+        bt := "b10".U
+      }.otherwise {
+        bt := "b11".U
+      }
     }
     is(new fromBigIntToLiteral(JalrOp.id).asUInt) {
       op := 6.U
@@ -107,6 +169,16 @@ class MainControl extends Module {
       tReg := 3.U
       br := false.B
       jp := true.B
+
+      when(io.funct3 === "b000".U) {
+        bt := "b00".U
+      }.elsewhen(io.funct3 === "b001".U) {
+        bt := "b01".U
+      }.elsewhen(io.funct3 === "b100".U || io.funct3 === "b110".U) {
+        bt := "b10".U
+      }.otherwise {
+        bt := "b11".U
+      }
     }
   }
 
@@ -118,4 +190,5 @@ class MainControl extends Module {
   io.toReg := tReg
   io.branch := br
   io.jmp := jp
+  io.bType := bt
 }
