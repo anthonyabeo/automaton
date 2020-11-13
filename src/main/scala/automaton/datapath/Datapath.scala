@@ -14,11 +14,13 @@ class Datapath(XLEN: Int) extends Module {
     val aluSrcA = Input(UInt(2.W))
     val toReg = Input(UInt(2.W))
     val branch = Input(Bool())
+    val bType = Input(UInt(2.W))
     val jmp = Input(Bool())
 
     val reg = Output(SInt(XLEN.W))
     val pc = Output(UInt(XLEN.W))
     val neg = Output(Bool())
+    val pos = Output(Bool())
     val zero = Output(Bool())
 
     val opcode = Output(UInt(7.W))
@@ -46,7 +48,7 @@ class Datapath(XLEN: Int) extends Module {
   }.elsewhen(io.toReg === 2.U) {
     RegFile.io.writeData := oneTo32Sext(Alu.io.negative)
   }.otherwise {
-    RegFile.io.writeData := (PC + 1.U).asSInt
+    RegFile.io.writeData := (PC + 4.U).asSInt
   }
 
   val offSet = Wire(Bits(12.W))
@@ -60,7 +62,11 @@ class Datapath(XLEN: Int) extends Module {
   val target = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8), "b0".U).asSInt, 19))
 
   when(io.aluSrcA === 0.U) {
-    Alu.io.a := RegFile.io.readData1
+    when(io.jmp) {
+      Alu.io.a := RegFile.io.readData1 << 2
+    }.otherwise {
+      Alu.io.a := RegFile.io.readData1
+    }
   }.otherwise {
     Alu.io.a := (PC).asSInt
   }
@@ -68,9 +74,13 @@ class Datapath(XLEN: Int) extends Module {
   when(io.aluSrcB === 0.U) {
     Alu.io.b := RegFile.io.readData2
   }.elsewhen(io.aluSrcB === 1.U) {
-    Alu.io.b := signExt(offSet.asSInt, 20)
+    when(io.jmp) {
+      Alu.io.b := signExt(offSet.asSInt, 20) << 2
+    }.otherwise {
+      Alu.io.b := signExt(offSet.asSInt, 20)
+    }
   }.otherwise {
-    Alu.io.b := jmpOffset.asSInt
+    Alu.io.b := (jmpOffset.asSInt << 2)
   }
 
   Alu.io.aluCtl := io.aluCtl
@@ -79,12 +89,40 @@ class Datapath(XLEN: Int) extends Module {
   DataMem.io.wrEna := io.memWrite
   DataMem.io.dataIN := RegFile.io.readData2
 
-  when(io.branch & Alu.io.zero) {
-    PC := PC + target.asUInt
-  }.elsewhen(io.branch & !Alu.io.zero) {
-    PC := PC + target.asUInt
+  // val branchType = WireInit(Cat(io.branch, io.bType))
+  when(io.branch) {
+    switch(io.bType) {
+      is("b00".U) { // BEQ
+        when(Alu.io.zero) {
+          PC := PC + (target.asUInt << 2)
+        }.otherwise {
+          PC := PC + 4.U
+        }
+      }
+      is("b01".U) { // BNE
+        when(!Alu.io.zero) {
+          PC := PC + (target.asUInt << 2)
+        }.otherwise {
+          PC := PC + 4.U
+        }
+      }
+      is("b10".U) { // BLT[U]
+        when(Alu.io.negative) {
+          PC := PC + (target.asUInt << 2)
+        }.otherwise {
+          PC := PC + 4.U
+        }
+      }
+      is("b11".U) { // BGE[U]
+        when(Alu.io.zero || Alu.io.positive) {
+          PC := PC + (target.asUInt << 2)
+        }.otherwise {
+          PC := PC + 4.U
+        }
+      }
+    }
   }.otherwise {
-    PC := PC + 1.U
+    PC := PC + 4.U
   }
 
   when(io.jmp) {
@@ -94,6 +132,7 @@ class Datapath(XLEN: Int) extends Module {
   io.reg := Alu.io.result
   io.pc := PC
   io.neg := Alu.io.negative
+  io.pos := Alu.io.positive
   io.zero := Alu.io.zero
 
   io.opcode := instr(6, 0)

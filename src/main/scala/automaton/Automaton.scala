@@ -31,6 +31,7 @@ class Automaton(XLEN: Int) extends Module {
   datapath.io.memWrite := contoller.io.memWrite
   datapath.io.toReg := contoller.io.toReg
   datapath.io.aluCtl := contoller.io.aluCtl
+  datapath.io.bType := contoller.io.bType
 
   contoller.io.opcode := datapath.io.opcode
   contoller.io.funct3 := datapath.io.funct3
