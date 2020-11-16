@@ -61,6 +61,24 @@ class MainControlTest extends FlatSpec with ChiselScalatestTester {
       ctl.io.toReg.expect(0.U)
       ctl.io.branch.expect(true.B)
       ctl.io.jmp.expect(false.B)
+
+      ctl.io.funct3.poke("b000".U)
+      ctl.io.bType.expect("b00".U)
+
+      ctl.io.funct3.poke("b001".U)
+      ctl.io.bType.expect("b01".U)
+
+      ctl.io.funct3.poke("b100".U)
+      ctl.io.bType.expect("b10".U)
+
+      ctl.io.funct3.poke("b110".U)
+      ctl.io.bType.expect("b10".U)
+
+      ctl.io.funct3.poke("b101".U)
+      ctl.io.bType.expect("b11".U)
+
+      ctl.io.funct3.poke("b111".U)
+      ctl.io.bType.expect("b11".U)
     }
 
     test(new MainControl).withAnnotations(Seq(WriteVcdAnnotation)) { ctl =>

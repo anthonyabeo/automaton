@@ -89,7 +89,6 @@ class Datapath(XLEN: Int) extends Module {
   DataMem.io.wrEna := io.memWrite
   DataMem.io.dataIN := RegFile.io.readData2
 
-  // val branchType = WireInit(Cat(io.branch, io.bType))
   when(io.branch) {
     switch(io.bType) {
       is("b00".U) { // BEQ
