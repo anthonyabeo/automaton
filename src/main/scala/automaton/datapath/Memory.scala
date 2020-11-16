@@ -56,10 +56,7 @@ class DataCache(XLEN: Int) extends Module {
   }.otherwise {
     switch(io.size) {
       is(0.U) { // load byte
-        io.dataOUT := Cat(
-          signExt(mem.read(io.addr).asSInt, 56),
-          mem.read(io.addr)
-        ).asSInt
+        io.dataOUT := signExt(mem.read(io.addr).asSInt, 56).asSInt
       }
 
       is(1.U) { // load halfword
@@ -68,7 +65,7 @@ class DataCache(XLEN: Int) extends Module {
           mem.read(io.addr)
         )
 
-        io.dataOUT := Cat(signExt(hword.asSInt, 48), hword).asSInt
+        io.dataOUT := signExt(hword.asSInt, 48).asSInt
       }
 
       is(2.U) { // load word
@@ -79,7 +76,7 @@ class DataCache(XLEN: Int) extends Module {
           mem.read(io.addr)
         )
 
-        io.dataOUT := Cat(signExt(word.asSInt, 32), word).asSInt
+        io.dataOUT := signExt(word.asSInt, 32).asSInt
       }
 
       is(3.U) { // load DoubleWord
