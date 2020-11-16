@@ -17,6 +17,7 @@ class Controller extends Module {
     val branch = Output(Bool())
     val bType = Output(UInt(2.W))
     val jmp = Output(Bool())
+    val size = Output(UInt(3.W))
   })
 
   val ALUCtl = Module(new ALUControl)
@@ -44,4 +45,5 @@ class Controller extends Module {
   io.branch := MainCtl.io.branch
   io.jmp := MainCtl.io.jmp
   io.bType := MainCtl.io.bType
+  io.size := MainCtl.io.size
 }

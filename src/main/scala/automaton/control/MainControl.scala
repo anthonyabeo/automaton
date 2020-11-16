@@ -19,6 +19,7 @@ class MainControl extends Module {
     val branch = Output(Bool())
     val bType = Output(UInt(2.W))
     val jmp = Output(Bool())
+    val size = Output(UInt(3.W))
   })
 
   val op = WireDefault(0.U(3.W))
@@ -30,6 +31,7 @@ class MainControl extends Module {
   val br = WireDefault(false.B)
   val jp = WireDefault(false.B)
   val bt = WireDefault(0.U(2.W))
+  val sz = WireDefault(0.U(3.W))
 
   switch(io.opcode) {
     is(new fromBigIntToLiteral(RegOp.id).asUInt) {
@@ -89,6 +91,7 @@ class MainControl extends Module {
       tReg := 1.U
       br := false.B
       jp := false.B
+      sz := io.funct3
     }
     is(new fromBigIntToLiteral(StrOp.id).asUInt) {
       op := 4.U
@@ -99,6 +102,7 @@ class MainControl extends Module {
       tReg := 0.U
       br := false.B
       jp := false.B
+      sz := io.funct3
     }
     is(new fromBigIntToLiteral(JalOp.id).asUInt) {
       op := 5.U
@@ -131,4 +135,5 @@ class MainControl extends Module {
   io.branch := br
   io.jmp := jp
   io.bType := bt
+  io.size := sz
 }

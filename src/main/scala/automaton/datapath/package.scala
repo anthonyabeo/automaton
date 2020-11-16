@@ -5,8 +5,8 @@ package object datapath {
   val add :: sub :: and :: or :: xor :: sll :: srl :: sra :: Nil = Enum(8)
 
   def signExt(n: SInt, extAmt: Int): SInt = {
-    val width = (32 - extAmt - 1)
-    val out = Wire(Bits(32.W))
+    val width = (64 - extAmt - 1)
+    val out = Wire(Bits(64.W))
 
     when((n(width) === 0.U)) {
       val bitString = "b0".U
@@ -21,7 +21,7 @@ package object datapath {
 
   def oneTo32Sext(n: Bool): SInt = {
     val bitString = "b0".U
-    Cat(Fill(31, bitString), n).asSInt
+    Cat(Fill(63, bitString), n).asSInt
   }
 
   object Operation extends Enumeration {

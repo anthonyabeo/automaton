@@ -7,7 +7,7 @@ import chisel3._
 class ALUTest extends FlatSpec with ChiselScalatestTester with Matchers {
   behavior.of("ALU")
   it should "be able to add two register numbers" in {
-    test(new ALU(8)) { c =>
+    test(new ALU(XLEN = 64)) { c =>
       {
         c.io.a.poke(12.S)
         c.io.b.poke(30.S)

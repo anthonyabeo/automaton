@@ -5,9 +5,10 @@ import chisel3._
 import datapath.Datapath
 import control.Controller
 
-class Automaton(XLEN: Int) extends Module {
+class Automaton extends Module {
+  val XLEN = 64
   val io = IO(new Bundle {
-    val rdData = Input(SInt(XLEN.W))
+    // val rdData = Input(SInt(XLEN.W))
 
     // val addr = Output(UInt(XLEN.W))
     // val wrData = Output(SInt(XLEN.W))
@@ -32,6 +33,7 @@ class Automaton(XLEN: Int) extends Module {
   datapath.io.toReg := contoller.io.toReg
   datapath.io.aluCtl := contoller.io.aluCtl
   datapath.io.bType := contoller.io.bType
+  datapath.io.size := contoller.io.size
 
   contoller.io.opcode := datapath.io.opcode
   contoller.io.funct3 := datapath.io.funct3

@@ -16,6 +16,7 @@ class Datapath(XLEN: Int) extends Module {
     val branch = Input(Bool())
     val bType = Input(UInt(2.W))
     val jmp = Input(Bool())
+    val size = Input(UInt(3.W))
 
     val reg = Output(SInt(XLEN.W))
     val pc = Output(UInt(XLEN.W))
@@ -58,8 +59,8 @@ class Datapath(XLEN: Int) extends Module {
     offSet := instr(31, 20)
   }
 
-  val jmpOffset = WireInit(signExt(Cat(instr(31), instr(19, 12), instr(20), instr(30, 21), "b0".U).asSInt, 12))
-  val target = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8), "b0".U).asSInt, 19))
+  val jmpOffset = WireInit(signExt(Cat(instr(31), instr(19, 12), instr(20), instr(30, 21), "b0".U).asSInt, 43))
+  val target = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8), "b0".U).asSInt, 51))
 
   when(io.aluSrcA === 0.U) {
     when(io.jmp) {
@@ -75,9 +76,9 @@ class Datapath(XLEN: Int) extends Module {
     Alu.io.b := RegFile.io.readData2
   }.elsewhen(io.aluSrcB === 1.U) {
     when(io.jmp) {
-      Alu.io.b := signExt(offSet.asSInt, 20) << 2
+      Alu.io.b := signExt(offSet.asSInt, 52) << 2
     }.otherwise {
-      Alu.io.b := signExt(offSet.asSInt, 20)
+      Alu.io.b := signExt(offSet.asSInt, 52)
     }
   }.otherwise {
     Alu.io.b := (jmpOffset.asSInt << 2)
@@ -88,6 +89,7 @@ class Datapath(XLEN: Int) extends Module {
   DataMem.io.addr := Alu.io.result.asUInt
   DataMem.io.wrEna := io.memWrite
   DataMem.io.dataIN := RegFile.io.readData2
+  DataMem.io.size := io.size
 
   when(io.branch) {
     switch(io.bType) {

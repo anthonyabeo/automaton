@@ -11,7 +11,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
   behavior.of("Datapath")
 
   it should "Run All the Tests" in {
-    test(new Datapath(XLEN = 32)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
+    test(new Datapath(XLEN = 64)).withAnnotations(Seq(WriteVcdAnnotation)) { dp =>
       dp.io.pc.expect(0.U)
 
       /////////////
@@ -295,7 +295,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.aluSrcB.poke(1.U)
       dp.io.memWrite.poke(true.B)
       dp.io.aluCtl.poke(0.U)
-
+      dp.io.size.poke(2.U)
       dp.io.reg.expect(6.S)
 
       //////////////////////////
