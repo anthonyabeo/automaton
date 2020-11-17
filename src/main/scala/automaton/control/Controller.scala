@@ -13,7 +13,7 @@ class Controller extends Module {
     val memWrite = Output(Bool())
     val aluSrcB = Output(UInt(2.W))
     val aluSrcA = Output(UInt(2.W))
-    val toReg = Output(UInt(2.W))
+    val toReg = Output(UInt(3.W))
     val branch = Output(Bool())
     val bType = Output(UInt(2.W))
     val jmp = Output(Bool())

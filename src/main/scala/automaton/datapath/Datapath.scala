@@ -12,7 +12,7 @@ class Datapath(XLEN: Int) extends Module {
     val memWrite = Input(Bool())
     val aluSrcB = Input(UInt(2.W))
     val aluSrcA = Input(UInt(2.W))
-    val toReg = Input(UInt(2.W))
+    val toReg = Input(UInt(3.W))
     val branch = Input(Bool())
     val bType = Input(UInt(2.W))
     val jmp = Input(Bool())
@@ -38,6 +38,10 @@ class Datapath(XLEN: Int) extends Module {
   InstrMem.io.addr := PC
   val instr = InstrMem.io.dataOUT
 
+  val jmpOffset = WireInit(signExt(Cat(instr(31), instr(19, 12), instr(20), instr(30, 21), "b0".U).asSInt, 43))
+  val target = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8), "b0".U).asSInt, 51))
+  val uImm = WireInit(signExt(Cat(instr(31, 12), Fill(12, "b0".U)).asSInt, 32))
+
   RegFile.io.readReg1 := instr(19, 15)
   RegFile.io.readReg2 := instr(24, 20)
   RegFile.io.writeReg := instr(11, 7)
@@ -48,8 +52,10 @@ class Datapath(XLEN: Int) extends Module {
     RegFile.io.writeData := DataMem.io.dataOUT
   }.elsewhen(io.toReg === 2.U) {
     RegFile.io.writeData := oneTo32Sext(Alu.io.negative)
-  }.otherwise {
+  }.elsewhen(io.toReg === 3.U) {
     RegFile.io.writeData := (PC + 4.U).asSInt
+  }.otherwise {
+    RegFile.io.writeData := uImm
   }
 
   val offSet = Wire(Bits(12.W))
@@ -58,9 +64,6 @@ class Datapath(XLEN: Int) extends Module {
   }.otherwise {
     offSet := instr(31, 20)
   }
-
-  val jmpOffset = WireInit(signExt(Cat(instr(31), instr(19, 12), instr(20), instr(30, 21), "b0".U).asSInt, 43))
-  val target = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8), "b0".U).asSInt, 51))
 
   when(io.aluSrcA === 0.U) {
     when(io.jmp) {
@@ -83,7 +86,6 @@ class Datapath(XLEN: Int) extends Module {
   }.otherwise {
     Alu.io.b := (jmpOffset.asSInt << 2)
   }
-
   Alu.io.aluCtl := io.aluCtl
 
   DataMem.io.addr := Alu.io.result.asUInt
