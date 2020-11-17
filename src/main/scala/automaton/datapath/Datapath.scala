@@ -83,8 +83,10 @@ class Datapath(XLEN: Int) extends Module {
     }.otherwise {
       Alu.io.b := signExt(offSet.asSInt, 52)
     }
-  }.otherwise {
+  }.elsewhen(io.aluSrcB === 2.U) {
     Alu.io.b := (jmpOffset.asSInt << 2)
+  }.otherwise {
+    Alu.io.b := uImm
   }
   Alu.io.aluCtl := io.aluCtl
 
