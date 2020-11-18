@@ -22,6 +22,8 @@ class Datapath(XLEN: Int) extends Module {
     val opcode = Output(UInt(7.W))
     val funct3 = Output(UInt(3.W))
     val funct7 = Output(UInt(7.W))
+    val wrData = Output(SInt(XLEN.W))
+    val addr = Output(UInt(XLEN.W))
   })
 
   val PC = RegInit(0.U(XLEN.W))
@@ -140,7 +142,13 @@ class Datapath(XLEN: Int) extends Module {
     PC := Alu.io.result.asUInt
   }
 
+  ////////////////////
+  // Outputs
+  ////////////////////
   io.opcode := instr(6, 0)
   io.funct3 := instr(14, 12)
   io.funct7 := instr(31, 25)
+
+  io.wrData := RegFile.io.readData2
+  io.addr := Alu.io.result.asUInt
 }

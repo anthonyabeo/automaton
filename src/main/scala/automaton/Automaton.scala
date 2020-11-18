@@ -8,12 +8,12 @@ import control.Controller
 class Automaton extends Module {
   val XLEN = 64
   val io = IO(new Bundle {
-    // val rdData = Input(SInt(XLEN.W))
+    val rdData = Input(SInt(XLEN.W))
 
-    // val addr = Output(UInt(XLEN.W))
-    // val wrData = Output(SInt(XLEN.W))
-    // val memWrite = Output(Bool())
-    //val valid = Output(Bool())
+    val addr = Output(UInt(XLEN.W))
+    val wrData = Output(SInt(XLEN.W))
+    val memWrite = Output(Bool())
+    val valid = Output(Bool())
   })
 
   val datapath = Module(new Datapath(XLEN))
@@ -40,9 +40,8 @@ class Automaton extends Module {
   contoller.io.funct3 := datapath.io.funct3
   contoller.io.funct7 := datapath.io.funct7
 
-//   io.memWrite := contoller.io.memWrite
-//   io.addr := datapath.io.addr
-//   io.wrData := datapath.io.wrData
-
-//   io.rdData :=
+  io.memWrite := contoller.io.memWrite
+  io.valid := contoller.io.valid
+  io.addr := datapath.io.addr
+  io.wrData := datapath.io.wrData
 }
