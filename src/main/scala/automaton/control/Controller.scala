@@ -18,6 +18,7 @@ class Controller extends Module {
     val bType = Output(UInt(2.W))
     val jmp = Output(Bool())
     val size = Output(UInt(3.W))
+    val wOp = Output(Bool())
   })
 
   val ALUCtl = Module(new ALUControl)
@@ -46,4 +47,5 @@ class Controller extends Module {
   io.jmp := MainCtl.io.jmp
   io.bType := MainCtl.io.bType
   io.size := MainCtl.io.size
+  io.wOp := MainCtl.io.wOp
 }

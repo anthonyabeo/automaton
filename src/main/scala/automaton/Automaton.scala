@@ -34,6 +34,7 @@ class Automaton extends Module {
   datapath.io.aluCtl := contoller.io.aluCtl
   datapath.io.bType := contoller.io.bType
   datapath.io.size := contoller.io.size
+  datapath.io.wOp := contoller.io.wOp
 
   contoller.io.opcode := datapath.io.opcode
   contoller.io.funct3 := datapath.io.funct3

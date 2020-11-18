@@ -20,6 +20,7 @@ class MainControl extends Module {
     val bType = Output(UInt(2.W))
     val jmp = Output(Bool())
     val size = Output(UInt(3.W))
+    val wOp = Output(Bool())
   })
 
   val op = WireDefault(0.U(3.W))
@@ -32,12 +33,12 @@ class MainControl extends Module {
   val jp = WireDefault(false.B)
   val bt = WireDefault(0.U(2.W))
   val sz = WireDefault(0.U(3.W))
+  val wop = WireDefault(false.B)
 
   switch(io.opcode) {
     is(new fromBigIntToLiteral(RegOp.id).asUInt) {
       op := 0.U
       regW := true.B
-      mWrt := false.B
       srcB := 0.U
       srcA := 0.U
       when(io.funct3 === "b010".U || io.funct3 === "b011".U) {
@@ -45,13 +46,10 @@ class MainControl extends Module {
       }.otherwise {
         tReg := 0.U
       }
-      br := false.B
-      jp := false.B
     }
     is(new fromBigIntToLiteral(ImmeOp.id).asUInt) {
       op := 1.U
       regW := true.B
-      mWrt := false.B
       srcB := 1.U
       srcA := 0.U
       when(io.funct3 === "b010".U || io.funct3 === "b011".U) {
@@ -59,18 +57,13 @@ class MainControl extends Module {
       }.otherwise {
         tReg := 0.U
       }
-      br := false.B
-      jp := false.B
     }
     is(new fromBigIntToLiteral(BranchOp.id).asUInt) {
       op := 2.U
-      regW := false.B
-      mWrt := false.B
       srcB := 0.U
       srcA := 0.U
       tReg := 0.U
       br := true.B
-      jp := false.B
 
       when(io.funct3 === "b000".U) {
         bt := "b00".U
@@ -85,44 +78,41 @@ class MainControl extends Module {
     is(new fromBigIntToLiteral(LdOp.id).asUInt) {
       op := 3.U
       regW := true.B
-      mWrt := false.B
       srcB := 1.U
       srcA := 0.U
       tReg := 1.U
-      br := false.B
-      jp := false.B
       sz := io.funct3
     }
     is(new fromBigIntToLiteral(StrOp.id).asUInt) {
       op := 4.U
-      regW := false.B
       mWrt := true.B
       srcB := 1.U
       srcA := 0.U
       tReg := 0.U
-      br := false.B
-      jp := false.B
       sz := io.funct3
     }
     is(new fromBigIntToLiteral(JalOp.id).asUInt) {
       op := 5.U
       regW := true.B
-      mWrt := false.B
       srcB := 2.U
       srcA := 1.U
       tReg := 3.U
-      br := false.B
       jp := true.B
     }
     is(new fromBigIntToLiteral(JalrOp.id).asUInt) {
       op := 6.U
       regW := true.B
-      mWrt := false.B
       srcB := 1.U
       srcA := 1.U
       tReg := 3.U
-      br := false.B
       jp := true.B
+    }
+    is(new fromBigIntToLiteral(WOp.id).asUInt) {
+      op := 0.U
+      regW := true.B
+      srcB := 0.U
+      srcA := 0.U
+      wop := true.B
     }
   }
 
@@ -136,4 +126,5 @@ class MainControl extends Module {
   io.jmp := jp
   io.bType := bt
   io.size := sz
+  io.wOp := wop
 }
