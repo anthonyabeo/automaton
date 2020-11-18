@@ -100,6 +100,7 @@ class Datapath(XLEN: Int) extends Module {
     Alu.io.b := uImm
   }
   Alu.io.aluCtl := io.aluCtl
+  Alu.io.wOp := io.wOp
 
   DataMem.io.addr := Alu.io.result.asUInt
   DataMem.io.wrEna := io.memWrite

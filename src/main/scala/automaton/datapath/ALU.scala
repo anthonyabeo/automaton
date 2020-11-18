@@ -10,6 +10,7 @@ class ALU(XLEN: Int) extends Module {
     val a = Input(SInt(XLEN.W))
     val b = Input(SInt(XLEN.W))
     val aluCtl = Input(UInt(3.W))
+    val wOp = Input(Bool())
 
     val zero = Output(Bool())
     val negative = Output(Bool())
@@ -38,13 +39,21 @@ class ALU(XLEN: Int) extends Module {
       res := a ^ b
     }
     is(sll) {
-      res := a << b(4, 0).asUInt
+      when(io.wOp) {
+        res := signExt((a << b(4, 0).asUInt()).asSInt, 32)
+      }.otherwise {
+        res := a << b(5, 0).asUInt
+      }
     }
     is(srl) {
-      res := a >> b(4, 0).asUInt
+      when(io.wOp) {
+        res := signExt((a >> b(4, 0).asUInt).asSInt, 32)
+      }.otherwise {
+        res := a >> b(5, 0).asUInt
+      }
     }
     is(sra) {
-      val shamt = b(4, 0).asUInt
+      val shamt = b(5, 0).asUInt
       val mask = WireDefault(0.S(XLEN.W))
       when(a(XLEN - 1) === 1.U) {
         mask := -1.S << (new fromBigIntToLiteral(XLEN).asUInt - shamt)
