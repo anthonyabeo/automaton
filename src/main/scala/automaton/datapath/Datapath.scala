@@ -17,6 +17,7 @@ class Datapath(XLEN: Int) extends Module {
     val bType = Input(UInt(2.W))
     val jmp = Input(Bool())
     val size = Input(UInt(3.W))
+    val wOp = Input(Bool())
 
     val reg = Output(SInt(XLEN.W))
     val pc = Output(UInt(XLEN.W))
@@ -47,7 +48,11 @@ class Datapath(XLEN: Int) extends Module {
   RegFile.io.writeReg := instr(11, 7)
   RegFile.io.wrEna := io.regWrite
   when(io.toReg === 0.U) {
-    RegFile.io.writeData := Alu.io.result
+    when(io.wOp) {
+      RegFile.io.writeData := signExt(Alu.io.result(31, 0).asSInt, 32)
+    }.otherwise {
+      RegFile.io.writeData := Alu.io.result
+    }
   }.elsewhen(io.toReg === 1.U) {
     RegFile.io.writeData := DataMem.io.dataOUT
   }.elsewhen(io.toReg === 2.U) {
@@ -68,6 +73,8 @@ class Datapath(XLEN: Int) extends Module {
   when(io.aluSrcA === 0.U) {
     when(io.jmp) {
       Alu.io.a := RegFile.io.readData1 << 2
+    }.elsewhen(io.wOp) {
+      Alu.io.a := signExt(RegFile.io.readData1(31, 0).asSInt, 32)
     }.otherwise {
       Alu.io.a := RegFile.io.readData1
     }
@@ -76,7 +83,11 @@ class Datapath(XLEN: Int) extends Module {
   }
 
   when(io.aluSrcB === 0.U) {
-    Alu.io.b := RegFile.io.readData2
+    when(io.wOp) {
+      Alu.io.b := signExt(RegFile.io.readData2(31, 0).asSInt, 32)
+    }.otherwise {
+      Alu.io.b := RegFile.io.readData2
+    }
   }.elsewhen(io.aluSrcB === 1.U) {
     when(io.jmp) {
       Alu.io.b := signExt(offSet.asSInt, 52) << 2
