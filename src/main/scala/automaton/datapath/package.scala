@@ -33,5 +33,6 @@ package object datapath {
     val JalrOp = Value(0x67)
     val LdOp = Value(0x3)
     val StrOp = Value(0x23)
+    val WOp = Value(0x3b)
   }
 }
