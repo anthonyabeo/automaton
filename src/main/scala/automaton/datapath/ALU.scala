@@ -5,7 +5,7 @@ import chisel3.util._
 
 import datapath._
 
-class ALU(XLEN: Int) extends Module {
+class ALU(var XLEN: Int) extends Module {
   val io = IO(new Bundle {
     val a = Input(SInt(XLEN.W))
     val b = Input(SInt(XLEN.W))
@@ -21,6 +21,12 @@ class ALU(XLEN: Int) extends Module {
   val a = io.a
   val b = io.b
   val res = WireDefault(0.S(XLEN.W))
+  val shamt = WireDefault(b(5, 0).asUInt)
+
+  when(io.wOp) {
+    XLEN = 32
+    shamt := b(4, 0).asUInt
+  }
 
   switch(io.aluCtl) {
     is(add) {
@@ -53,7 +59,6 @@ class ALU(XLEN: Int) extends Module {
       }
     }
     is(sra) {
-      val shamt = b(5, 0).asUInt
       val mask = WireDefault(0.S(XLEN.W))
       when(a(XLEN - 1) === 1.U) {
         mask := -1.S << (new fromBigIntToLiteral(XLEN).asUInt - shamt)
