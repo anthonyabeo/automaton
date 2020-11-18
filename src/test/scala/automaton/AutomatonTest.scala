@@ -14,7 +14,7 @@ class AutomatonTest extends FlatSpec with ChiselScalatestTester {
 
   it should "compute fib of 8" in {
     test(new Automaton).withAnnotations(Seq(WriteVcdAnnotation, NoDCEAnnotation)) { auto =>
-      auto.clock.step(100)
+      auto.clock.step(150)
     }
   }
 }

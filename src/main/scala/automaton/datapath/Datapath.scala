@@ -19,12 +19,6 @@ class Datapath(XLEN: Int) extends Module {
     val size = Input(UInt(3.W))
     val wOp = Input(Bool())
 
-    val reg = Output(SInt(XLEN.W))
-    val pc = Output(UInt(XLEN.W))
-    val neg = Output(Bool())
-    val pos = Output(Bool())
-    val zero = Output(Bool())
-
     val opcode = Output(UInt(7.W))
     val funct3 = Output(UInt(3.W))
     val funct7 = Output(UInt(7.W))
@@ -145,12 +139,6 @@ class Datapath(XLEN: Int) extends Module {
   when(io.jmp) {
     PC := Alu.io.result.asUInt
   }
-
-  io.reg := Alu.io.result
-  io.pc := PC
-  io.neg := Alu.io.negative
-  io.pos := Alu.io.positive
-  io.zero := Alu.io.zero
 
   io.opcode := instr(6, 0)
   io.funct3 := instr(14, 12)
