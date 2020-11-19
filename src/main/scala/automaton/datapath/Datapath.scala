@@ -35,9 +35,11 @@ class Datapath(XLEN: Int) extends Module {
   InstrMem.io.addr := PC
   val instr = InstrMem.io.dataOUT
 
-  val jmpOffset = WireInit(signExt(Cat(instr(31), instr(19, 12), instr(20), instr(30, 21), "b0".U).asSInt, 43))
-  val target = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8), "b0".U).asSInt, 51))
-  val uImm = WireInit(signExt(Cat(instr(31, 12), Fill(12, "b0".U)).asSInt, 32))
+  val iTypeImme = WireInit(signExt(instr(31, 20).asSInt, 52))
+  val sTypeImme = WireInit(signExt(Cat(instr(31, 25), instr(11, 7)).asSInt, 52))
+  val jTypeImme = WireInit(signExt(Cat(instr(31), instr(19, 12), instr(20), instr(30, 21), "b0".U).asSInt, 43))
+  val bTypeImme = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8), "b0".U).asSInt, 51))
+  val uTypeImme = WireInit(signExt(Cat(instr(31, 12), Fill(12, "b0".U)).asSInt, 32))
 
   RegFile.io.readReg1 := instr(19, 15)
   RegFile.io.readReg2 := instr(24, 20)
@@ -56,15 +58,15 @@ class Datapath(XLEN: Int) extends Module {
   }.elsewhen(io.toReg === 3.U) {
     RegFile.io.writeData := (PC + 4.U).asSInt
   }.otherwise {
-    RegFile.io.writeData := uImm
+    RegFile.io.writeData := uTypeImme
   }
 
-  val offSet = Wire(Bits(12.W))
-  when(io.memWrite) {
-    offSet := Cat(instr(31, 25), instr(11, 7))
-  }.otherwise {
-    offSet := instr(31, 20)
-  }
+  // val offSet = Wire(Bits(12.W))
+  // when(io.memWrite) {
+  //   offSet := Cat(instr(31, 25), instr(11, 7))
+  // }.otherwise {
+  //   offSet := instr(31, 20)
+  // }
 
   when(io.aluSrcA === 0.U) {
     when(io.jmp) {
@@ -86,14 +88,16 @@ class Datapath(XLEN: Int) extends Module {
     }
   }.elsewhen(io.aluSrcB === 1.U) {
     when(io.jmp) {
-      Alu.io.b := signExt(offSet.asSInt, 52) << 2
+      Alu.io.b := iTypeImme << 2
+    }.elsewhen(io.memWrite) {
+      Alu.io.b := sTypeImme
     }.otherwise {
-      Alu.io.b := signExt(offSet.asSInt, 52)
+      Alu.io.b := iTypeImme
     }
   }.elsewhen(io.aluSrcB === 2.U) {
-    Alu.io.b := (jmpOffset.asSInt << 2)
+    Alu.io.b := (jTypeImme.asSInt << 2)
   }.otherwise {
-    Alu.io.b := uImm
+    Alu.io.b := uTypeImme
   }
   Alu.io.aluCtl := io.aluCtl
   Alu.io.wOp := io.wOp
@@ -107,28 +111,28 @@ class Datapath(XLEN: Int) extends Module {
     switch(io.bType) {
       is("b00".U) { // BEQ
         when(Alu.io.zero) {
-          PC := PC + (target.asUInt << 2)
+          PC := PC + (bTypeImme.asUInt << 2)
         }.otherwise {
           PC := PC + 4.U
         }
       }
       is("b01".U) { // BNE
         when(!Alu.io.zero) {
-          PC := PC + (target.asUInt << 2)
+          PC := PC + (bTypeImme.asUInt << 2)
         }.otherwise {
           PC := PC + 4.U
         }
       }
       is("b10".U) { // BLT[U]
         when(Alu.io.negative || Alu.io.zero) {
-          PC := PC + (target.asUInt << 2)
+          PC := PC + (bTypeImme.asUInt << 2)
         }.otherwise {
           PC := PC + 4.U
         }
       }
       is("b11".U) { // BGE[U]
         when(Alu.io.zero || Alu.io.positive) {
-          PC := PC + (target.asUInt << 2)
+          PC := PC + (bTypeImme.asUInt << 2)
         }.otherwise {
           PC := PC + 4.U
         }
