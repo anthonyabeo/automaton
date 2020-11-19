@@ -18,8 +18,6 @@ class Automaton extends Module {
 
   val datapath = Module(new Datapath(XLEN))
   val contoller = Module(new Controller)
-  // val L1DataCache = Module(new DataCache)
-  // val L1InstrCache = Module(new InstrCache)
 
   ////////////////////////
   // PLUMBING
