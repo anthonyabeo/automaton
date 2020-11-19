@@ -41,9 +41,18 @@ class Datapath(XLEN: Int) extends Module {
   val bTypeImme = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8), "b0".U).asSInt, 51))
   val uTypeImme = WireInit(signExt(Cat(instr(31, 12), Fill(12, "b0".U)).asSInt, 32))
 
-  RegFile.io.readReg1 := instr(19, 15)
-  RegFile.io.readReg2 := instr(24, 20)
-  RegFile.io.writeReg := instr(11, 7)
+  val OPCODE = instr(19, 15)
+  val RS1 = instr(11, 7)
+  val RS2 = instr(24, 20)
+  val FUNCT3 = instr(14, 12)
+  val FUNCT7 = instr(31, 25)
+
+  /////////////////////////////
+  // Register File
+  /////////////////////////////
+  RegFile.io.readReg1 := OPCODE
+  RegFile.io.readReg2 := RS2
+  RegFile.io.writeReg := RS1
   RegFile.io.wrEna := io.regWrite
   when(io.toReg === 0.U) {
     when(io.wOp) {
@@ -61,13 +70,9 @@ class Datapath(XLEN: Int) extends Module {
     RegFile.io.writeData := uTypeImme
   }
 
-  // val offSet = Wire(Bits(12.W))
-  // when(io.memWrite) {
-  //   offSet := Cat(instr(31, 25), instr(11, 7))
-  // }.otherwise {
-  //   offSet := instr(31, 20)
-  // }
-
+  ///////////////////////////
+  // selecting ALU Operand A
+  ///////////////////////////
   when(io.aluSrcA === 0.U) {
     when(io.jmp) {
       Alu.io.a := RegFile.io.readData1 << 2
@@ -80,6 +85,9 @@ class Datapath(XLEN: Int) extends Module {
     Alu.io.a := (PC).asSInt
   }
 
+  ///////////////////////////
+  // selecting ALU Operand B
+  ///////////////////////////
   when(io.aluSrcB === 0.U) {
     when(io.wOp) {
       Alu.io.b := signExt(RegFile.io.readData2(31, 0).asSInt, 32)
@@ -107,51 +115,26 @@ class Datapath(XLEN: Int) extends Module {
   DataMem.io.dataIN := RegFile.io.readData2
   DataMem.io.size := io.size
 
+  ///////////////////////////////
+  // Next PC
+  //////////////////////////////
   when(io.branch) {
-    switch(io.bType) {
-      is("b00".U) { // BEQ
-        when(Alu.io.zero) {
-          PC := PC + (bTypeImme.asUInt << 2)
-        }.otherwise {
-          PC := PC + 4.U
-        }
-      }
-      is("b01".U) { // BNE
-        when(!Alu.io.zero) {
-          PC := PC + (bTypeImme.asUInt << 2)
-        }.otherwise {
-          PC := PC + 4.U
-        }
-      }
-      is("b10".U) { // BLT[U]
-        when(Alu.io.negative || Alu.io.zero) {
-          PC := PC + (bTypeImme.asUInt << 2)
-        }.otherwise {
-          PC := PC + 4.U
-        }
-      }
-      is("b11".U) { // BGE[U]
-        when(Alu.io.zero || Alu.io.positive) {
-          PC := PC + (bTypeImme.asUInt << 2)
-        }.otherwise {
-          PC := PC + 4.U
-        }
-      }
+    val c = Cat(io.bType, (Alu.io.zero || (!Alu.io.negative)))
+    when(c === 1.U || c === 2.U || c === 3.U || c === 5.U || c === 7.U) {
+      PC := PC + (bTypeImme.asUInt << 2)
     }
+  }.elsewhen(io.jmp) {
+    PC := Alu.io.result.asUInt
   }.otherwise {
     PC := PC + 4.U
-  }
-
-  when(io.jmp) {
-    PC := Alu.io.result.asUInt
   }
 
   ////////////////////
   // Outputs
   ////////////////////
-  io.opcode := instr(6, 0)
-  io.funct3 := instr(14, 12)
-  io.funct7 := instr(31, 25)
+  io.opcode := OPCODE
+  io.funct3 := FUNCT3
+  io.funct7 := FUNCT7
 
   io.wrData := RegFile.io.readData2
   io.addr := Alu.io.result.asUInt
