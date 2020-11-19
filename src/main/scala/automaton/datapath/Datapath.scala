@@ -41,8 +41,9 @@ class Datapath(XLEN: Int) extends Module {
   val bTypeImme = WireInit(signExt(Cat(instr(31), instr(7), instr(30, 25), instr(11, 8), "b0".U).asSInt, 51))
   val uTypeImme = WireInit(signExt(Cat(instr(31, 12), Fill(12, "b0".U)).asSInt, 32))
 
-  val OPCODE = instr(19, 15)
-  val RS1 = instr(11, 7)
+  val OPCODE = instr(6, 0)
+  val RD = instr(11, 7)
+  val RS1 = instr(19, 15)
   val RS2 = instr(24, 20)
   val FUNCT3 = instr(14, 12)
   val FUNCT7 = instr(31, 25)
@@ -50,9 +51,9 @@ class Datapath(XLEN: Int) extends Module {
   /////////////////////////////
   // Register File
   /////////////////////////////
-  RegFile.io.readReg1 := OPCODE
+  RegFile.io.readReg1 := RS1
   RegFile.io.readReg2 := RS2
-  RegFile.io.writeReg := RS1
+  RegFile.io.writeReg := RD
   RegFile.io.wrEna := io.regWrite
   when(io.toReg === 0.U) {
     when(io.wOp) {
