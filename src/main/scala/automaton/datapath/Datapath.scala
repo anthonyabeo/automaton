@@ -120,9 +120,35 @@ class Datapath(XLEN: Int) extends Module {
   // Next PC
   //////////////////////////////
   when(io.branch) {
-    val c = Cat(io.bType, (Alu.io.zero || (!Alu.io.negative)))
-    when(c === 1.U || c === 2.U || c === 3.U || c === 5.U || c === 7.U) {
-      PC := PC + (bTypeImme.asUInt << 2)
+    switch(io.bType) {
+      is("b00".U) { // BEQ
+        when(Alu.io.zero) {
+          PC := PC + (bTypeImme.asUInt << 2)
+        }.otherwise {
+          PC := PC + 4.U
+        }
+      }
+      is("b01".U) { // BNE
+        when(!Alu.io.zero) {
+          PC := PC + (bTypeImme.asUInt << 2)
+        }.otherwise {
+          PC := PC + 4.U
+        }
+      }
+      is("b10".U) { // BLT[U]
+        when(Alu.io.negative || Alu.io.zero) {
+          PC := PC + (bTypeImme.asUInt << 2)
+        }.otherwise {
+          PC := PC + 4.U
+        }
+      }
+      is("b11".U) { // BGE[U]
+        when(Alu.io.zero || Alu.io.positive) {
+          PC := PC + (bTypeImme.asUInt << 2)
+        }.otherwise {
+          PC := PC + 4.U
+        }
+      }
     }
   }.elsewhen(io.jmp) {
     PC := Alu.io.result.asUInt
