@@ -136,7 +136,7 @@ class Datapath(XLEN: Int) extends Module {
         }
       }
       is("b10".U) { // BLT[U]
-        when(Alu.io.negative || Alu.io.zero) {
+        when(Alu.io.negative) {
           PC := PC + (bTypeImme.asUInt << 2)
         }.otherwise {
           PC := PC + 4.U
