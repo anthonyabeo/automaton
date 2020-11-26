@@ -8,9 +8,9 @@ class RegisterFile(XLEN: Int) extends Module {
   val NUM_REGISTERS = 32
 
   val io = IO(new Bundle {
-    val readReg1 = Input(UInt(log2Ceil(XLEN).W))
-    val readReg2 = Input(UInt(log2Ceil(XLEN).W))
-    val writeReg = Input(UInt(log2Ceil(XLEN).W))
+    val readReg1 = Input(UInt(log2Ceil(NUM_REGISTERS).W))
+    val readReg2 = Input(UInt(log2Ceil(NUM_REGISTERS).W))
+    val writeReg = Input(UInt(log2Ceil(NUM_REGISTERS).W))
     val wrEna = Input(Bool())
     val writeData = Input(SInt(XLEN.W))
 
