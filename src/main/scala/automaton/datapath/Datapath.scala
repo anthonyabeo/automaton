@@ -85,25 +85,28 @@ class Datapath(XLEN: Int) extends Module {
   // Register File
   RegFile.io.readReg1 := RS1
   RegFile.io.readReg2 := RS2
-  RegFile.io.wrEna := io.regWrite
 
   ID_EX.io.rd1ID := RegFile.io.readData1
   ID_EX.io.rd2ID := RegFile.io.readData2
   ID_EX.io.writeRegID := RD
+  ID_EX.io.regWriteID := io.regWrite
+  ID_EX.io.aluCtlID := io.aluCtl
+  ID_EX.io.wOpID := io.wOp
 
   /////////////////////////////////////////////
   // EXECUTE STAGE
   /////////////////////////////////////////////
   Alu.io.a := ID_EX.io.rd1EX
   Alu.io.b := ID_EX.io.rd2EX
-  Alu.io.aluCtl := io.aluCtl
-  Alu.io.wOp := io.wOp
+  Alu.io.aluCtl := ID_EX.io.aluCtlEX
+  Alu.io.wOp := ID_EX.io.wOpEX
 
   val regWriteDataEX = Alu.io.b
   EX_MEM.io.aluResEX := Alu.io.result
   EX_MEM.io.aluZeroEX := Alu.io.zero
   EX_MEM.io.writeDataEX := regWriteDataEX
   EX_MEM.io.writeRegEX := ID_EX.io.writeRegEX
+  EX_MEM.io.regWriteEX := ID_EX.io.regWriteEX
 
   /////////////////////////////////////////////
   // MEMORY STAGE
@@ -115,12 +118,14 @@ class Datapath(XLEN: Int) extends Module {
 
   MEM_WB.io.aluResMEM := EX_MEM.io.aluResMEM
   MEM_WB.io.writeRegMEM := EX_MEM.io.writeRegMEM
+  MEM_WB.io.regWriteMEM := EX_MEM.io.regWriteMEM
 
   /////////////////////////////////////////////
   // WRITE_BACK STAGE
   /////////////////////////////////////////////
   RegFile.io.writeData := MEM_WB.io.aluResWB
   RegFile.io.writeReg := MEM_WB.io.writeRegMEM
+  RegFile.io.wrEna := MEM_WB.io.regWriteWB
 
   // /////////////////////////////
   // // Register File
