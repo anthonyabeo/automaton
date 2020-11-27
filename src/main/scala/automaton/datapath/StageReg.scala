@@ -22,7 +22,10 @@ class IDEXStageReg extends Module {
     val wOpID = Input(Bool())
     val toRegID = Input(UInt(3.W))
     val iTypeImmeID = Input(SInt(64.W))
+    val sTypeImmeID = Input(SInt(64.W))
     val aluSrcBID = Input(UInt(2.W))
+    val memWriteID = Input(Bool())
+    val sizeID = Input(UInt(3.W))
 
     val rd1EX = Output(SInt(64.W))
     val rd2EX = Output(SInt(64.W))
@@ -32,13 +35,17 @@ class IDEXStageReg extends Module {
     val wOpEX = Output(Bool())
     val toRegEX = Output(UInt(3.W))
     val iTypeImmeEX = Output(SInt(64.W))
+    val sTypeImmeEX = Output(SInt(64.W))
     val aluSrcBEX = Output(UInt(2.W))
+    val memWriteEX = Output(Bool())
+    val sizeEX = Output(UInt(3.W))
   })
 
   io.rd1EX := RegNext(io.rd1ID)
   io.rd2EX := RegNext(io.rd2ID)
   io.writeRegEX := RegNext(io.writeRegID)
   io.iTypeImmeEX := RegNext(io.iTypeImmeID)
+  io.sTypeImmeEX := RegNext(io.sTypeImmeID)
 
   // Control signals
   io.regWriteEX := RegNext(io.regWriteID)
@@ -46,6 +53,8 @@ class IDEXStageReg extends Module {
   io.wOpEX := RegNext(io.wOpID)
   io.toRegEX := RegNext(io.toRegID)
   io.aluSrcBEX := RegNext(io.aluSrcBID)
+  io.memWriteEX := RegNext(io.memWriteID)
+  io.sizeEX := RegNext(io.sizeID)
 }
 
 class EXMEMStageReg extends Module {
@@ -57,6 +66,8 @@ class EXMEMStageReg extends Module {
     val writeRegEX = Input(UInt(5.W))
     val regWriteEX = Input(Bool())
     val toRegEX = Input(UInt(3.W))
+    val memWriteEX = Input(Bool())
+    val sizeEX = Input(UInt(3.W))
 
     val aluResMEM = Output(SInt(64.W))
     val aluZeroMEM = Output(Bool())
@@ -65,6 +76,8 @@ class EXMEMStageReg extends Module {
     val writeRegMEM = Output(UInt(5.W))
     val regWriteMEM = Output(Bool())
     val toRegMEM = Output(UInt(3.W))
+    val memWriteMEM = Output(Bool())
+    val sizeMEM = Output(UInt(3.W))
   })
 
   io.aluResMEM := RegNext(io.aluResEX)
@@ -74,6 +87,8 @@ class EXMEMStageReg extends Module {
   io.writeRegMEM := RegNext(io.writeRegEX)
   io.regWriteMEM := RegNext(io.regWriteEX)
   io.toRegMEM := RegNext(io.toRegEX)
+  io.memWriteMEM := RegNext(io.memWriteEX)
+  io.sizeMEM := RegNext(io.sizeEX)
 }
 
 class MEMWBStageReg extends Module {

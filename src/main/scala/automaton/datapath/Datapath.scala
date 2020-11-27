@@ -94,7 +94,10 @@ class Datapath(XLEN: Int) extends Module {
   ID_EX.io.wOpID := io.wOp
   ID_EX.io.toRegID := io.toReg
   ID_EX.io.iTypeImmeID := iTypeImme
+  ID_EX.io.sTypeImmeID := sTypeImme
   ID_EX.io.aluSrcBID := io.aluSrcB
+  ID_EX.io.memWriteID := io.memWrite
+  ID_EX.io.sizeID := io.size
 
   /////////////////////////////////////////////
   // EXECUTE STAGE
@@ -105,13 +108,19 @@ class Datapath(XLEN: Int) extends Module {
   when(ID_EX.io.aluSrcBEX === 0.U) {
     Alu.io.b := ID_EX.io.rd2EX
   }.otherwise {
-    Alu.io.b := ID_EX.io.iTypeImmeEX
+    when(io.jmp) {
+      Alu.io.b := ID_EX.io.iTypeImmeEX << 2
+    }.elsewhen(io.memWrite) {
+      Alu.io.b := ID_EX.io.sTypeImmeEX
+    }.otherwise {
+      Alu.io.b := ID_EX.io.iTypeImmeEX
+    }
   }
 
   Alu.io.aluCtl := ID_EX.io.aluCtlEX
   Alu.io.wOp := ID_EX.io.wOpEX
 
-  val regWriteDataEX = Alu.io.b
+  val regWriteDataEX = ID_EX.io.rd2EX
   EX_MEM.io.aluResEX := Alu.io.result
   EX_MEM.io.aluZeroEX := Alu.io.zero
   EX_MEM.io.aluNegEX := Alu.io.negative
@@ -119,14 +128,16 @@ class Datapath(XLEN: Int) extends Module {
   EX_MEM.io.writeRegEX := ID_EX.io.writeRegEX
   EX_MEM.io.regWriteEX := ID_EX.io.regWriteEX
   EX_MEM.io.toRegEX := ID_EX.io.toRegEX
+  EX_MEM.io.memWriteEX := ID_EX.io.memWriteEX
+  EX_MEM.io.sizeEX := ID_EX.io.sizeEX
 
   /////////////////////////////////////////////
   // MEMORY STAGE
   /////////////////////////////////////////////
   DataMem.io.addr := EX_MEM.io.aluResMEM.asUInt
   DataMem.io.dataIN := EX_MEM.io.writeDataMEM
-  DataMem.io.wrEna := io.memWrite
-  DataMem.io.size := io.size
+  DataMem.io.wrEna := EX_MEM.io.memWriteMEM
+  DataMem.io.size := EX_MEM.io.sizeMEM
 
   MEM_WB.io.aluResMEM := EX_MEM.io.aluResMEM
   MEM_WB.io.aluNegMEM := EX_MEM.io.aluNegMEM
