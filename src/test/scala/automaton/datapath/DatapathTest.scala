@@ -126,7 +126,6 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       //////////////
       // 12. ANDI //
       //////////////
-      // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
 
       dp.io.regWrite.poke(true.B)
@@ -137,7 +136,6 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       //////////////
       // 13. ORI  //
       //////////////
-      // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
 
       dp.io.regWrite.poke(true.B)
@@ -148,7 +146,6 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       //////////////
       // 14. XORI //
       //////////////
-      // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
 
       dp.io.regWrite.poke(true.B)
@@ -156,41 +153,37 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.memWrite.poke(false.B)
       dp.io.aluSrcB.poke(1.U)
 
+      ///////////////
+      // 15. SLLI  //
+      ///////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(5.U)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+
+      ///////////////
+      // 16. SRLI  //
+      //////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(6.U)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+
+      //////////////
+      // 17. SRAI //
+      //////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(7.U)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+
       dp.clock.step(5)
-
-      // ///////////////
-      // // 15. SLLI  //
-      // ///////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluCtl.poke(5.U)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.memWrite.poke(false.B)
-
-      // ///////////////
-      // // 16. SRLI  //
-      // //////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluCtl.poke(6.U)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.memWrite.poke(false.B)
-
-      // //////////////
-      // // 17. SRAI //
-      // //////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluCtl.poke(7.U)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.memWrite.poke(false.B)
-
       // ///////////////
       // // 18. SLTI  //
       // ///////////////
