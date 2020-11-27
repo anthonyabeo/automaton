@@ -92,6 +92,7 @@ class Datapath(XLEN: Int) extends Module {
   ID_EX.io.regWriteID := io.regWrite
   ID_EX.io.aluCtlID := io.aluCtl
   ID_EX.io.wOpID := io.wOp
+  ID_EX.io.toRegID := io.toReg
 
   /////////////////////////////////////////////
   // EXECUTE STAGE
@@ -104,9 +105,11 @@ class Datapath(XLEN: Int) extends Module {
   val regWriteDataEX = Alu.io.b
   EX_MEM.io.aluResEX := Alu.io.result
   EX_MEM.io.aluZeroEX := Alu.io.zero
+  EX_MEM.io.aluNegEX := Alu.io.negative
   EX_MEM.io.writeDataEX := regWriteDataEX
   EX_MEM.io.writeRegEX := ID_EX.io.writeRegEX
   EX_MEM.io.regWriteEX := ID_EX.io.regWriteEX
+  EX_MEM.io.toRegEX := ID_EX.io.toRegEX
 
   /////////////////////////////////////////////
   // MEMORY STAGE
@@ -117,16 +120,22 @@ class Datapath(XLEN: Int) extends Module {
   DataMem.io.size := io.size
 
   MEM_WB.io.aluResMEM := EX_MEM.io.aluResMEM
+  MEM_WB.io.aluNegMEM := EX_MEM.io.aluNegMEM
   MEM_WB.io.writeRegMEM := EX_MEM.io.writeRegMEM
   MEM_WB.io.regWriteMEM := EX_MEM.io.regWriteMEM
+  MEM_WB.io.toRegMEM := EX_MEM.io.toRegMEM
 
   /////////////////////////////////////////////
   // WRITE_BACK STAGE
   /////////////////////////////////////////////
-  RegFile.io.writeData := MEM_WB.io.aluResWB
   RegFile.io.writeReg := MEM_WB.io.writeRegMEM
   RegFile.io.wrEna := MEM_WB.io.regWriteWB
 
+  when(MEM_WB.io.toRegWB === 0.U) {
+    RegFile.io.writeData := MEM_WB.io.aluResWB
+  }.otherwise {
+    RegFile.io.writeData := oneTo32Sext(MEM_WB.io.aluNegWB)
+  }
   // /////////////////////////////
   // // Register File
   // /////////////////////////////
