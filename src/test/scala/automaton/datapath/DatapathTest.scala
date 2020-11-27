@@ -202,59 +202,56 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.regWrite.poke(true.B)
       dp.io.aluSrcB.poke(1.U)
       dp.io.memWrite.poke(false.B)
-      dp.io.toReg.poke(2.U)
+      dp.io.toReg.poke(1.U)
       dp.io.aluCtl.poke(1.U) // substraction
 
+      /////////////////////////////
+      // SB- store byte          //
+      /////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(false.B)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(true.B)
+      dp.io.aluCtl.poke(0.U)
+      dp.io.size.poke(0.U)
+
+      /////////////////////////////
+      // SH- store Halfword //
+      ////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(false.B)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(true.B)
+      dp.io.aluCtl.poke(0.U)
+      dp.io.size.poke(1.U)
+
+      //////////////////////////
+      // SW - store word //
+      /////////////////////////
+      // Delay for a few clock cycle to execute prior instructions
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(false.B)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(true.B)
+      dp.io.aluCtl.poke(0.U)
+      dp.io.size.poke(2.U)
+
+      //////////////////////////
+      // SD - store Double    //
+      //////////////////////////
+      // Delay for a few clock cycle to execute prior instructions
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(false.B)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(true.B)
+      dp.io.aluCtl.poke(0.U)
+      dp.io.size.poke(3.U)
+
       dp.clock.step(5)
-
-      // /////////////////////////////
-      // // SB- store byte          //
-      // ////////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(false.B)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.memWrite.poke(true.B)
-      // dp.io.aluCtl.poke(0.U)
-      // dp.io.size.poke(0.U)
-
-      // /////////////////////////////
-      // // SH- store Halfword //
-      // ////////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(false.B)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.memWrite.poke(true.B)
-      // dp.io.aluCtl.poke(0.U)
-      // dp.io.size.poke(1.U)
-
-      // //////////////////////////
-      // // SW - store word //
-      // /////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(false.B)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.memWrite.poke(true.B)
-      // dp.io.aluCtl.poke(0.U)
-      // dp.io.size.poke(2.U)
-
-      // //////////////////////////
-      // // SD - store Double      //
-      // /////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(false.B)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.memWrite.poke(true.B)
-      // dp.io.aluCtl.poke(0.U)
-      // dp.io.size.poke(3.U)
-
       // //////////////////////////
       // // LB - load byte   //
       // //////////////////////////
