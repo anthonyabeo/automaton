@@ -93,12 +93,21 @@ class Datapath(XLEN: Int) extends Module {
   ID_EX.io.aluCtlID := io.aluCtl
   ID_EX.io.wOpID := io.wOp
   ID_EX.io.toRegID := io.toReg
+  ID_EX.io.iTypeImmeID := iTypeImme
+  ID_EX.io.aluSrcBID := io.aluSrcB
 
   /////////////////////////////////////////////
   // EXECUTE STAGE
   /////////////////////////////////////////////
   Alu.io.a := ID_EX.io.rd1EX
-  Alu.io.b := ID_EX.io.rd2EX
+
+  // Selecting ALU SRC B
+  when(ID_EX.io.aluSrcBEX === 0.U) {
+    Alu.io.b := ID_EX.io.rd2EX
+  }.otherwise {
+    Alu.io.b := ID_EX.io.iTypeImmeEX
+  }
+
   Alu.io.aluCtl := ID_EX.io.aluCtlEX
   Alu.io.wOp := ID_EX.io.wOpEX
 
@@ -136,6 +145,7 @@ class Datapath(XLEN: Int) extends Module {
   }.otherwise {
     RegFile.io.writeData := oneTo32Sext(MEM_WB.io.aluNegWB)
   }
+
   // /////////////////////////////
   // // Register File
   // /////////////////////////////

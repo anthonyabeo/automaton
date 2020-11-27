@@ -21,6 +21,8 @@ class IDEXStageReg extends Module {
     val aluCtlID = Input(UInt(3.W))
     val wOpID = Input(Bool())
     val toRegID = Input(UInt(3.W))
+    val iTypeImmeID = Input(SInt(64.W))
+    val aluSrcBID = Input(UInt(2.W))
 
     val rd1EX = Output(SInt(64.W))
     val rd2EX = Output(SInt(64.W))
@@ -29,17 +31,21 @@ class IDEXStageReg extends Module {
     val aluCtlEX = Output(UInt(3.W))
     val wOpEX = Output(Bool())
     val toRegEX = Output(UInt(3.W))
+    val iTypeImmeEX = Output(SInt(64.W))
+    val aluSrcBEX = Output(UInt(2.W))
   })
 
   io.rd1EX := RegNext(io.rd1ID)
   io.rd2EX := RegNext(io.rd2ID)
   io.writeRegEX := RegNext(io.writeRegID)
+  io.iTypeImmeEX := RegNext(io.iTypeImmeID)
 
   // Control signals
   io.regWriteEX := RegNext(io.regWriteID)
   io.aluCtlEX := RegNext(io.aluCtlID)
   io.wOpEX := RegNext(io.wOpID)
   io.toRegEX := RegNext(io.toRegID)
+  io.aluSrcBEX := RegNext(io.aluSrcBID)
 }
 
 class EXMEMStageReg extends Module {
