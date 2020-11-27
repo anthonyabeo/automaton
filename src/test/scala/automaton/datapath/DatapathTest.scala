@@ -17,45 +17,43 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       /////////////
       // 1. ADD //
       /////////////
+      dp.clock.step(1)
+
       dp.io.regWrite.poke(true.B)
       dp.io.aluCtl.poke(0.U)
-      dp.io.memWrite.poke(false.B)
+
+      ////////////
+      // 2. AND //
+      ////////////
+      dp.clock.step(1)
+
+      // Delay for a few clock cycle to execute prior instructions
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(2.U)
+
+      ///////////
+      // 3. OR //
+      ///////////
+      dp.clock.step(1)
+
+      // Delay for a few clock cycle to execute prior instructions
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(3.U)
       dp.io.aluSrcB.poke(0.U)
-
-      dp.clock.step(5)
-      // ////////////
-      // // 2. AND //
-      // ////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluCtl.poke(2.U)
-      // dp.io.memWrite.poke(false.B)
-      // dp.io.aluSrcB.poke(0.U)
-
-      // ///////////
-      // // 3. OR //
-      // ///////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluCtl.poke(3.U)
-      // dp.io.aluSrcB.poke(0.U)
-      // dp.io.memWrite.poke(false.B)
+      dp.io.memWrite.poke(false.B)
 
       // ////////////
       // // 4. XOR //
       // ////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
+      // Delay for a few clock cycle to execute prior instructions
+      dp.clock.step(1)
 
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluCtl.poke(4.U)
-      // dp.io.aluSrcB.poke(0.U)
-      // dp.io.memWrite.poke(false.B)
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(4.U)
+      dp.io.aluSrcB.poke(0.U)
+      dp.io.memWrite.poke(false.B)
 
+      dp.clock.step(5)
       // ////////////
       // // 5. SUB //
       // ////////////
