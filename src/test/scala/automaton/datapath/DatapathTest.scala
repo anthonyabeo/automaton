@@ -27,7 +27,6 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       ////////////
       dp.clock.step(1)
 
-      // Delay for a few clock cycle to execute prior instructions
       dp.io.regWrite.poke(true.B)
       dp.io.aluCtl.poke(2.U)
 
@@ -36,7 +35,6 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       ///////////
       dp.clock.step(1)
 
-      // Delay for a few clock cycle to execute prior instructions
       dp.io.regWrite.poke(true.B)
       dp.io.aluCtl.poke(3.U)
       dp.io.aluSrcB.poke(0.U)
@@ -45,7 +43,6 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       // ////////////
       // // 4. XOR //
       // ////////////
-      // Delay for a few clock cycle to execute prior instructions
       dp.clock.step(1)
 
       dp.io.regWrite.poke(true.B)
@@ -53,74 +50,69 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.aluSrcB.poke(0.U)
       dp.io.memWrite.poke(false.B)
 
+      ////////////
+      // 5. SUB //
+      ////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(1.U)
+      dp.io.aluSrcB.poke(0.U)
+      dp.io.memWrite.poke(false.B)
+
+      ////////////////////////////////
+      // 6. SLL- shift left logical //
+      ////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(5.U)
+      dp.io.aluSrcB.poke(0.U)
+      dp.io.memWrite.poke(false.B)
+
+      /////////////////////////////////
+      // 7. SRL- shift right logical //
+      /////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(6.U)
+      dp.io.aluSrcB.poke(0.U)
+      dp.io.memWrite.poke(false.B)
+
+      /////////////////////////////////////
+      // 8. SRA- shift right arithmetic //
+      ////////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluCtl.poke(7.U)
+      dp.io.aluSrcB.poke(0.U)
+      dp.io.memWrite.poke(false.B)
+
+      /////////////////////////////////////////////////////////////////////
+      // 9. SLT - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0 //
+      ////////////////////////////////////////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcB.poke(0.U)
+      dp.io.memWrite.poke(false.B)
+      dp.io.toReg.poke(2.U)
+      dp.io.aluCtl.poke(1.U) // substraction
+
+      /////////////////////////////////////////////////////////////////////
+      // 10. SLTU - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0 //
+      /////////////////////////////////////////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcB.poke(0.U)
+      dp.io.memWrite.poke(false.B)
+      dp.io.toReg.poke(2.U)
+      dp.io.aluCtl.poke(1.U) // substraction
+
       dp.clock.step(5)
-      // ////////////
-      // // 5. SUB //
-      // ////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluCtl.poke(1.U)
-      // dp.io.aluSrcB.poke(0.U)
-      // dp.io.memWrite.poke(false.B)
-
-      // ////////////////////////////////
-      // // 6. SLL- shift left logical //
-      // ////////////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluCtl.poke(5.U)
-      // dp.io.aluSrcB.poke(0.U)
-      // dp.io.memWrite.poke(false.B)
-
-      // /////////////////////////////////
-      // // 7. SRL- shift right logical //
-      // /////////////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluCtl.poke(6.U)
-      // dp.io.aluSrcB.poke(0.U)
-      // dp.io.memWrite.poke(false.B)
-
-      // /////////////////////////////////////
-      // // 8. SRA- shift right arithmetic //
-      // ////////////////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluCtl.poke(7.U)
-      // dp.io.aluSrcB.poke(0.U)
-      // dp.io.memWrite.poke(false.B)
-
-      // /////////////////////////////////////////////////////////////////////
-      // // 9. SLT - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0 //
-      // ////////////////////////////////////////////////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcB.poke(0.U)
-      // dp.io.memWrite.poke(false.B)
-      // dp.io.toReg.poke(2.U)
-      // dp.io.aluCtl.poke(1.U) // substraction
-
-      // /////////////////////////////////////////////////////////////////////
-      // // 10. SLTU - Reg[rd] <= 1 if Reg[rs1] < Reg[rs2] else Reg[rd] <= 0 //
-      // /////////////////////////////////////////////////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcB.poke(0.U)
-      // dp.io.memWrite.poke(false.B)
-      // dp.io.toReg.poke(2.U)
-      // dp.io.aluCtl.poke(1.U) // substraction
 
       // //////////////
       // // 11. ADDI //
