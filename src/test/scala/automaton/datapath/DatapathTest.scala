@@ -342,106 +342,107 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.branch.poke(false.B)
       dp.io.size.poke(6.U)
 
+      ///////////////////////////////////////
+      // ADDW - Add Word                   //
+      ///////////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcA.poke(0.U)
+      dp.io.aluSrcB.poke(0.U)
+      dp.io.aluCtl.poke(0.U)
+      dp.io.toReg.poke(0.U)
+      dp.io.wOp.poke(true.B)
+
+      ///////////////////////////////////////
+      // SUBW - Subtract Word              //
+      ///////////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcA.poke(0.U)
+      dp.io.aluSrcB.poke(0.U)
+      dp.io.aluCtl.poke(1.U)
+      dp.io.wOp.poke(true.B)
+
+      ///////////////////////////////////////
+      // SLLW - Shift Left Logical Word    //
+      ///////////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcA.poke(0.U)
+      dp.io.aluSrcB.poke(0.U)
+      dp.io.aluCtl.poke(5.U)
+      dp.io.wOp.poke(true.B)
+
+      ///////////////////////////////////////
+      // SRLW - Shift Right Logical Word   //
+      ///////////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcA.poke(0.U)
+      dp.io.aluSrcB.poke(0.U)
+      dp.io.aluCtl.poke(6.U)
+      dp.io.wOp.poke(true.B)
+
+      //////////////////////////////////////////
+      // SRAW - Shift Right Arithmetic Word   //
+      //////////////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcA.poke(0.U)
+      dp.io.aluSrcB.poke(0.U)
+      dp.io.aluCtl.poke(7.U)
+      dp.io.wOp.poke(true.B)
+
+      //////////////////////////////////////////
+      // ADDIW - Add Immediate Word           //
+      //////////////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcA.poke(0.U)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.aluCtl.poke(0.U)
+      dp.io.wOp.poke(true.B)
+
+      ///////////////////////////////////////////////
+      // SLLIW - Shift Left Logical Immediate Word //
+      ///////////////////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcA.poke(0.U)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.aluCtl.poke(5.U)
+      dp.io.wOp.poke(true.B)
+
+      ///////////////////////////////////////////////
+      // SRLIW - Shift Right Logical Immediate Word //
+      ///////////////////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcA.poke(0.U)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.aluCtl.poke(6.U)
+      dp.io.wOp.poke(true.B)
+
+      ///////////////////////////////////////////////////
+      // SRAIW - Shift Right Arithmetic Immediate Word //
+      ///////////////////////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcA.poke(0.U)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.aluCtl.poke(7.U)
+      dp.io.wOp.poke(true.B)
+
       dp.clock.step(5)
-      // ///////////////////////////////////////
-      // // ADDW - Add Word                   //
-      // ///////////////////////////////////////
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcA.poke(0.U)
-      // dp.io.aluSrcB.poke(0.U)
-      // dp.io.aluCtl.poke(0.U)
-      // dp.io.wOp.poke(true.B)
-
-      // ///////////////////////////////////////
-      // // SUBW - Subtract Word              //
-      // ///////////////////////////////////////
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcA.poke(0.U)
-      // dp.io.aluSrcB.poke(0.U)
-      // dp.io.aluCtl.poke(1.U)
-      // dp.io.wOp.poke(true.B)
-
-      // ///////////////////////////////////////
-      // // SLLW - Shift Left Logical Word    //
-      // ///////////////////////////////////////
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcA.poke(0.U)
-      // dp.io.aluSrcB.poke(0.U)
-      // dp.io.aluCtl.poke(5.U)
-      // dp.io.wOp.poke(true.B)
-
-      // ///////////////////////////////////////
-      // // SRLW - Shift Right Logical Word   //
-      // ///////////////////////////////////////
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcA.poke(0.U)
-      // dp.io.aluSrcB.poke(0.U)
-      // dp.io.aluCtl.poke(6.U)
-      // dp.io.wOp.poke(true.B)
-
-      // //////////////////////////////////////////
-      // // SRAW - Shift Right Arithmetic Word   //
-      // //////////////////////////////////////////
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcA.poke(0.U)
-      // dp.io.aluSrcB.poke(0.U)
-      // dp.io.aluCtl.poke(7.U)
-      // dp.io.wOp.poke(true.B)
-
-      // //////////////////////////////////////////
-      // // ADDIW - Add Immediate Word           //
-      // //////////////////////////////////////////
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcA.poke(0.U)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.aluCtl.poke(0.U)
-      // dp.io.wOp.poke(true.B)
-
-      // ///////////////////////////////////////////////
-      // // SLLIW - Shift Left Logical Immediate Word //
-      // ///////////////////////////////////////////////
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcA.poke(0.U)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.aluCtl.poke(5.U)
-      // dp.io.wOp.poke(true.B)
-
-      // ///////////////////////////////////////////////
-      // // SRLIW - Shift Right Logical Immediate Word //
-      // ///////////////////////////////////////////////
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcA.poke(0.U)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.aluCtl.poke(6.U)
-      // dp.io.wOp.poke(true.B)
-
-      // ///////////////////////////////////////////////////
-      // // SRAIW - Shift Right Arithmetic Immediate Word //
-      // ///////////////////////////////////////////////////
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcA.poke(0.U)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.aluCtl.poke(7.U)
-      // dp.io.wOp.poke(true.B)
-
       // ////////////////////////////////
       // // BEQ - branch if equal //
       // ///////////////////////////////
