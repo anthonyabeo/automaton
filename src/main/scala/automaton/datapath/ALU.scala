@@ -30,19 +30,19 @@ class ALU(var XLEN: Int) extends Module {
 
   switch(io.aluCtl) {
     is(add) {
-      res := a + b
+      res := signExt((a(XLEN - 1, 0).asSInt + b(XLEN - 1, 0).asSInt), 32)
     }
     is(sub) {
-      res := a - b
+      res := signExt((a(XLEN - 1, 0).asSInt - b(XLEN - 1, 0).asSInt), 32)
     }
     is(and) {
-      res := a & b
+      res := signExt((a(XLEN - 1, 0).asSInt & b(XLEN - 1, 0).asSInt), 32)
     }
     is(or) {
-      res := a | b
+      res := signExt((a(XLEN - 1, 0).asSInt | b(XLEN - 1, 0).asSInt), 32)
     }
     is(xor) {
-      res := a ^ b
+      res := signExt((a(XLEN - 1, 0).asSInt ^ b(XLEN - 1, 0).asSInt), 32)
     }
     is(sll) {
       when(io.wOp) {
