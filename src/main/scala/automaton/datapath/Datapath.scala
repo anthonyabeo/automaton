@@ -144,6 +144,7 @@ class Datapath(XLEN: Int) extends Module {
   MEM_WB.io.writeRegMEM := EX_MEM.io.writeRegMEM
   MEM_WB.io.regWriteMEM := EX_MEM.io.regWriteMEM
   MEM_WB.io.toRegMEM := EX_MEM.io.toRegMEM
+  MEM_WB.io.memReadMEM := DataMem.io.dataOUT
 
   /////////////////////////////////////////////
   // WRITE_BACK STAGE
@@ -153,8 +154,10 @@ class Datapath(XLEN: Int) extends Module {
 
   when(MEM_WB.io.toRegWB === 0.U) {
     RegFile.io.writeData := MEM_WB.io.aluResWB
-  }.otherwise {
+  }.elsewhen(MEM_WB.io.toRegWB === 1.U) {
     RegFile.io.writeData := oneTo32Sext(MEM_WB.io.aluNegWB)
+  }.otherwise {
+    RegFile.io.writeData := MEM_WB.io.memReadWB
   }
 
   // /////////////////////////////

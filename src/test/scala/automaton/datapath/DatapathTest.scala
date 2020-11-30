@@ -98,7 +98,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.regWrite.poke(true.B)
       dp.io.aluSrcB.poke(0.U)
       dp.io.memWrite.poke(false.B)
-      dp.io.toReg.poke(2.U)
+      dp.io.toReg.poke(1.U)
       dp.io.aluCtl.poke(1.U) // substraction
 
       /////////////////////////////////////////////////////////////////////
@@ -109,7 +109,7 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.regWrite.poke(true.B)
       dp.io.aluSrcB.poke(0.U)
       dp.io.memWrite.poke(false.B)
-      dp.io.toReg.poke(2.U)
+      dp.io.toReg.poke(1.U)
       dp.io.aluCtl.poke(1.U) // substraction
 
       //////////////
@@ -251,105 +251,98 @@ class DatapathTest extends FlatSpec with ChiselScalatestTester with Matchers {
       dp.io.aluCtl.poke(0.U)
       dp.io.size.poke(3.U)
 
+      //////////////////////////
+      // LB - load byte       //
+      //////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+      dp.io.aluCtl.poke(0.U)
+      dp.io.toReg.poke(2.U)
+      dp.io.branch.poke(false.B)
+      dp.io.size.poke(0.U)
+
+      //////////////////////////////
+      // LH - load Halfword       //
+      //////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+      dp.io.aluCtl.poke(0.U)
+      dp.io.toReg.poke(2.U)
+      dp.io.branch.poke(false.B)
+      dp.io.size.poke(1.U)
+
+      //////////////////////////
+      // LW - load word       //
+      //////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+      dp.io.aluCtl.poke(0.U)
+      dp.io.toReg.poke(2.U)
+      dp.io.branch.poke(false.B)
+      dp.io.size.poke(2.U)
+
+      ////////////////////////////////
+      // LD - load DoubleWord   //
+      ////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+      dp.io.aluCtl.poke(0.U)
+      dp.io.toReg.poke(2.U)
+      dp.io.branch.poke(false.B)
+      dp.io.size.poke(3.U)
+
+      ///////////////////////////////////
+      // LBU - load byte Unsigned  //
+      ///////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+      dp.io.aluCtl.poke(0.U)
+      dp.io.toReg.poke(2.U)
+      dp.io.branch.poke(false.B)
+      dp.io.size.poke(4.U)
+
+      ///////////////////////////////////////
+      // LHU - load Halfword Unsigned  //
+      ///////////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+      dp.io.aluCtl.poke(0.U)
+      dp.io.toReg.poke(2.U)
+      dp.io.branch.poke(false.B)
+      dp.io.size.poke(5.U)
+
+      ///////////////////////////////////////
+      // LWU - load Word Unsigned          //
+      ///////////////////////////////////////
+      dp.clock.step(1)
+
+      dp.io.regWrite.poke(true.B)
+      dp.io.aluSrcB.poke(1.U)
+      dp.io.memWrite.poke(false.B)
+      dp.io.aluCtl.poke(0.U)
+      dp.io.toReg.poke(2.U)
+      dp.io.branch.poke(false.B)
+      dp.io.size.poke(6.U)
+
       dp.clock.step(5)
-      // //////////////////////////
-      // // LB - load byte   //
-      // //////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.memWrite.poke(false.B)
-      // dp.io.aluCtl.poke(0.U)
-      // dp.io.toReg.poke(1.U)
-      // dp.io.branch.poke(false.B)
-      // dp.io.size.poke(0.U)
-
-      // //////////////////////////////
-      // // LH - load Halfword   //
-      // //////////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.memWrite.poke(false.B)
-      // dp.io.aluCtl.poke(0.U)
-      // dp.io.toReg.poke(1.U)
-      // dp.io.branch.poke(false.B)
-      // dp.io.size.poke(1.U)
-
-      // //////////////////////////
-      // // LW - load word   //
-      // //////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.memWrite.poke(false.B)
-      // dp.io.aluCtl.poke(0.U)
-      // dp.io.toReg.poke(1.U)
-      // dp.io.branch.poke(false.B)
-      // dp.io.size.poke(2.U)
-
-      // ////////////////////////////////
-      // // LD - load DoubleWord   //
-      // ////////////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.memWrite.poke(false.B)
-      // dp.io.aluCtl.poke(0.U)
-      // dp.io.toReg.poke(1.U)
-      // dp.io.branch.poke(false.B)
-      // dp.io.size.poke(3.U)
-
-      // ///////////////////////////////////
-      // // LBU - load byte Unsigned  //
-      // ///////////////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.memWrite.poke(false.B)
-      // dp.io.aluCtl.poke(0.U)
-      // dp.io.toReg.poke(1.U)
-      // dp.io.branch.poke(false.B)
-      // dp.io.size.poke(4.U)
-
-      // ///////////////////////////////////////
-      // // LHU - load Halfword Unsigned  //
-      // ///////////////////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.memWrite.poke(false.B)
-      // dp.io.aluCtl.poke(0.U)
-      // dp.io.toReg.poke(1.U)
-      // dp.io.branch.poke(false.B)
-      // dp.io.size.poke(5.U)
-
-      // ///////////////////////////////////////
-      // // LWU - load Word Unsigned          //
-      // ///////////////////////////////////////
-      // // Delay for a few clock cycle to execute prior instructions
-      // dp.clock.step(1)
-
-      // dp.io.regWrite.poke(true.B)
-      // dp.io.aluSrcB.poke(1.U)
-      // dp.io.memWrite.poke(false.B)
-      // dp.io.aluCtl.poke(0.U)
-      // dp.io.toReg.poke(1.U)
-      // dp.io.branch.poke(false.B)
-      // dp.io.size.poke(6.U)
-
       // ///////////////////////////////////////
       // // ADDW - Add Word                   //
       // ///////////////////////////////////////

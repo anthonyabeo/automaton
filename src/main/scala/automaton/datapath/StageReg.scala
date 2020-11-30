@@ -98,12 +98,14 @@ class MEMWBStageReg extends Module {
     val regWriteMEM = Input(Bool())
     val toRegMEM = Input(UInt(3.W))
     val aluNegMEM = Input(Bool())
+    val memReadMEM = Input(SInt(64.W))
 
     val aluResWB = Output(SInt(64.W))
     val writeRegWB = Output(UInt(5.W))
     val regWriteWB = Output(Bool())
     val toRegWB = Output(UInt(3.W))
     val aluNegWB = Output(Bool())
+    val memReadWB = Output(SInt(64.W))
   })
 
   io.aluResWB := RegNext(io.aluResMEM)
@@ -111,4 +113,5 @@ class MEMWBStageReg extends Module {
   io.regWriteWB := RegNext(io.regWriteMEM)
   io.toRegWB := RegNext(io.toRegMEM)
   io.aluNegWB := RegNext(io.aluNegMEM)
+  io.memReadWB := RegNext(io.memReadMEM)
 }
